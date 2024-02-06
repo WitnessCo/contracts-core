@@ -4,6 +4,9 @@ pragma solidity ^0.8.23;
 import { IWitness } from "./IWitness.sol";
 import { IWitnessProvenanceConsumer } from "./IWitnessProvenanceConsumer.sol";
 
+/// General error for invalid proof.
+error InvalidProof();
+
 /// @title MockWitnessProvenanceConsumer
 /// @author sina.eth
 /// @notice Test and prototyping utility for contracts that want to consume provenance.
@@ -31,7 +34,7 @@ abstract contract MockWitnessProvenanceConsumer is IWitnessProvenanceConsumer {
 
     /// @inheritdoc IWitnessProvenanceConsumer
     function verifyProof(uint256, bytes32, bytes32[] calldata, bytes32[] calldata, bytes32) public view {
-        require(mockVal);
+        if (!mockVal) revert InvalidProof();
     }
 
     /// @inheritdoc IWitnessProvenanceConsumer

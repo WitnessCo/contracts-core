@@ -17,7 +17,7 @@ contract ERC721P is ERC721, IERC721P {
     //////////////////////////////////////////////////////////////////////////*/
 
     /// @notice A mapping of tokenIds to their corresponding bridgeData.
-    mapping(uint256 => bytes) public idToBridgeData;
+    mapping(uint256 tokenId => bytes bridgeData) public idToBridgeData;
 
     /*//////////////////////////////////////////////////////////////////////////
                                      CONSTRUCTOR

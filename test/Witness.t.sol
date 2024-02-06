@@ -34,12 +34,12 @@ contract WitnessTest is PRBTest, StdUtils {
         bytes32[] memory rangeOne = new bytes32[](1);
         rangeOne[0] = bytes32(uint256(1));
         c.updateTreeRoot(1, new bytes32[](0), rangeOne);
-        (bytes32 __, uint256 size) = c.getCurrentTreeState();
+        (, uint256 size) = c.getCurrentTreeState();
         assertEq(size, 1);
         bytes32[] memory rangeTwo = new bytes32[](1);
         rangeTwo[0] = bytes32(uint256(2));
         c.updateTreeRoot(2, rangeOne, rangeTwo);
-        (__, size) = c.getCurrentTreeState();
+        (, size) = c.getCurrentTreeState();
         assertEq(size, 2);
     }
 
@@ -50,7 +50,7 @@ contract WitnessTest is PRBTest, StdUtils {
         range[0] = getInnerNode(1, 0);
         range[1] = getLeaf(2);
         c.updateTreeRoot(3, new bytes32[](0), range);
-        (bytes32 currentRoot, uint256 __) = c.getCurrentTreeState();
+        (bytes32 currentRoot,) = c.getCurrentTreeState();
         assertEq(currentRoot, hashToParent(range[0], range[1]));
 
         // Verify proof for the leaf at each index, 0 through 2.
@@ -86,7 +86,7 @@ contract WitnessTest is PRBTest, StdUtils {
         c.updateTreeRoot(10, oldRange, newRange);
         // Verify the root.
         bytes32 expectedRoot = hashToParent(getInnerNode(3, 0), getInnerNode(1, 4));
-        (currentRoot, __) = c.getCurrentTreeState();
+        (currentRoot,) = c.getCurrentTreeState();
         assertEq(currentRoot, expectedRoot);
 
         // Verify proof for the leaf at each index, 0 through 9.
@@ -187,7 +187,7 @@ contract WitnessTest is PRBTest, StdUtils {
         c.updateTreeRoot(12, oldRange, newRange);
         // Verify the root.
         expectedRoot = hashToParent(getInnerNode(3, 0), getInnerNode(2, 2));
-        (currentRoot, __) = c.getCurrentTreeState();
+        (currentRoot,) = c.getCurrentTreeState();
         assertEq(currentRoot, expectedRoot);
 
         // Now try updating the tree to size 13, for fun.
@@ -200,7 +200,7 @@ contract WitnessTest is PRBTest, StdUtils {
         c.updateTreeRoot(13, oldRange, newRange);
         // Verify the root.
         expectedRoot = hashToParent(getInnerNode(3, 0), hashToParent(getInnerNode(2, 2), getLeaf(12)));
-        (currentRoot, __) = c.getCurrentTreeState();
+        (currentRoot,) = c.getCurrentTreeState();
         assertEq(currentRoot, expectedRoot);
 
         // Now try updating the tree to size 14, for fun.
@@ -214,7 +214,7 @@ contract WitnessTest is PRBTest, StdUtils {
         c.updateTreeRoot(14, oldRange, newRange);
         // Verify the root.
         expectedRoot = hashToParent(getInnerNode(3, 0), hashToParent(getInnerNode(2, 2), getInnerNode(1, 6)));
-        (currentRoot, __) = c.getCurrentTreeState();
+        (currentRoot,) = c.getCurrentTreeState();
         assertEq(currentRoot, expectedRoot);
 
         // Now try updating the tree to size 15, for fun.
@@ -230,7 +230,7 @@ contract WitnessTest is PRBTest, StdUtils {
         expectedRoot = hashToParent(
             getInnerNode(3, 0), hashToParent(getInnerNode(2, 2), hashToParent(getInnerNode(1, 6), getLeaf(14)))
         );
-        (currentRoot, __) = c.getCurrentTreeState();
+        (currentRoot,) = c.getCurrentTreeState();
         assertEq(currentRoot, expectedRoot);
     }
 

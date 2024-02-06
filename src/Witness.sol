@@ -4,13 +4,7 @@ pragma solidity ^0.8.23;
 import { LibBit } from "solady/utils/LibBit.sol";
 import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
 
-import {
-    getRangeSizeForNonZeroBeginningInterval,
-    getRoot,
-    getRootForMergedRange,
-    hashToParent,
-    merge
-} from "./WitnessUtils.sol";
+import { getRangeSizeForNonZeroBeginningInterval, getRoot, getRootForMergedRange, merge } from "./WitnessUtils.sol";
 import { IWitness } from "./IWitness.sol";
 
 /*//////////////////////////////////////////////////////////////
@@ -48,7 +42,7 @@ contract Witness is IWitness, OwnableRoles {
 
     /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
     /// @inheritdoc IWitness
-    mapping(bytes32 => uint256) public rootCache;
+    mapping(bytes32 rootHash => uint256 treeSize) public rootCache;
 
     /// @notice The current root hash.
     /// @inheritdoc IWitness
@@ -133,7 +127,9 @@ contract Witness is IWitness, OwnableRoles {
     {
         try this.verifyProof(index, leaf, leftRange, rightRange, targetRoot) {
             isValid = true;
-        } catch { }
+        } catch {
+            return false;
+        }
     }
 
     /*//////////////////////////////////////////////////////////////

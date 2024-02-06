@@ -1,14 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {
-    getRangeSizeForNonZeroBeginningInterval,
-    getRoot,
-    getRootForMergedRange,
-    hashToParent,
-    merge
-} from "./WitnessUtils.sol";
-
 /// @title IWitness
 /// @author sina.eth
 /// @notice Interface for the core Witness smart contract.
