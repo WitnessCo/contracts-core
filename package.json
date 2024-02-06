@@ -1,39 +1,37 @@
 {
-  "name": "@prb/foundry-template",
-  "description": "Foundry-based template for developing Solidity smart contracts",
-  "version": "1.0.0",
-  "author": {
-    "name": "Paul Razvan Berg",
-    "url": "https://github.com/PaulRBerg"
-  },
-  "dependencies": {
-    "@openzeppelin/contracts": "^5.0.1"
-  },
-  "devDependencies": {
-    "@prb/test": "^0.6.4",
-    "forge-std": "github:foundry-rs/forge-std#v1.7.5",
-    "prettier": "^3.0.0",
-    "solhint": "^3.6.2"
-  },
-  "keywords": [
-    "blockchain",
-    "ethereum",
-    "forge",
-    "foundry",
-    "smart-contracts",
-    "solidity",
-    "template"
-  ],
-  "private": true,
-  "scripts": {
-    "clean": "rm -rf cache out",
-    "build": "forge build",
-    "lint": "bun run lint:sol && bun run prettier:check",
-    "lint:sol": "forge fmt --check && bun solhint {script,src,test}/**/*.sol",
-    "prettier:check": "prettier --check **/*.{json,md,yml} --ignore-path=.prettierignore",
-    "prettier:write": "prettier --write **/*.{json,md,yml} --ignore-path=.prettierignore",
-    "test": "forge test",
-    "test:coverage": "forge coverage",
-    "test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage"
-  }
+	"name": "@witnessco/core-contracts",
+	"description": "Core Solidity contracts for WitnessCo",
+	"version": "1.0.0",
+	"author": {
+		"name": "Sina Sabet",
+		"url": "https://github.com/WitnessCo/core-contracts"
+	},
+	"dependencies": {
+		"solady": "^0.0.167"
+	},
+	"devDependencies": {
+		"@prb/test": "^0.6.4",
+		"forge-std": "github:foundry-rs/forge-std#v1.7.5",
+		"prettier": "^3.0.0",
+		"solhint": "^3.6.2",
+		"tsx": "^3.14.0",
+		"typescript": "^5.2.2",
+		"viem": "^2.7.6",
+		"zod": "^3.22.4"
+	},
+	"peerDependencies": {
+		"viem": "^2.7.6",
+		"zod": "^3.22.4"
+	},
+	"scripts": {
+		"clean": "rm -rf cache out node_modules",
+		"build": "forge build",
+		"lint": "bun run lint:sol && bun run prettier:check",
+		"lint:sol": "forge fmt --check && bun solhint {script,src,test}/**/*.sol",
+		"prettier:check": "prettier --check **/*.{json,md,yml} --ignore-path=.prettierignore",
+		"prettier:write": "prettier --write **/*.{json,md,yml} --ignore-path=.prettierignore",
+		"test": "forge test",
+		"test:coverage": "forge coverage",
+		"test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage"
+	}
 }

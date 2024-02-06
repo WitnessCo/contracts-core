@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.8.23 <0.9.0;
+pragma solidity ^0.8.13;
 
-import { Foo } from "../src/Foo.sol";
+import {Script} from "forge-std/Script.sol";
+import {Witness} from "../src/Witness.sol";
 
-import { BaseScript } from "./Base.s.sol";
-
-/// @dev See the Solidity Scripting tutorial: https://book.getfoundry.sh/tutorials/solidity-scripting
-contract Deploy is BaseScript {
-    function run() public broadcast returns (Foo foo) {
-        foo = new Foo();
+contract DeployScript is Script {
+    function run() public {
+        uint256 deployerPrivateKey = vm.envUint("ETH_PRIVATE_KEY");
+        vm.startBroadcast(deployerPrivateKey);
+        new Witness(vm.addr(deployerPrivateKey));
+        vm.stopBroadcast();
     }
 }
