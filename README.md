@@ -1,9 +1,9 @@
 # Foundry Template [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![Foundry][foundry-badge]][foundry] [![License: MIT][license-badge]][license]
 
-[gitpod]: https://gitpod.io/#https://github.com/PaulRBerg/foundry-template
+[gitpod]: https://gitpod.io/#https://github.com/WitnessCo/contracts-core
 [gitpod-badge]: https://img.shields.io/badge/Gitpod-Open%20in%20Gitpod-FFB45B?logo=gitpod
-[gha]: https://github.com/PaulRBerg/foundry-template/actions
-[gha-badge]: https://github.com/PaulRBerg/foundry-template/actions/workflows/ci.yml/badge.svg
+[gha]: https://github.com/WitnessCo/contracts-core/actions
+[gha-badge]: https://github.com/WitnessCo/contracts-core/actions/workflows/ci.yml/badge.svg
 [foundry]: https://getfoundry.sh/
 [foundry-badge]: https://img.shields.io/badge/Built%20with-Foundry-FFDB1C.svg
 [license]: https://opensource.org/licenses/MIT
@@ -22,7 +22,7 @@ A Foundry-based template for developing Solidity smart contracts, with sensible 
 
 ## Getting Started
 
-Click the [`Use this template`](https://github.com/PaulRBerg/foundry-template/generate) button at the top of the page to
+Click the [`Use this template`](https://github.com/WitnessCo/contracts-core/generate) button at the top of the page to
 create a new repository with this repo as the initial state.
 
 Or, if you prefer to install the template manually:
@@ -30,7 +30,7 @@ Or, if you prefer to install the template manually:
 ```sh
 $ mkdir my-project
 $ cd my-project
-$ forge init --template PaulRBerg/foundry-template
+$ forge init --template WitnessCo/contracts-core
 $ bun install # install Solhint, Prettier, and other Node.js deps
 ```
 
