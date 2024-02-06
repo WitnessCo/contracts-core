@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import { IWitness } from "./interfaces/IWitness.sol";
+import { IWitness, Proof } from "./interfaces/IWitness.sol";
 import { IWitnessProvenanceConsumer } from "./interfaces/IWitnessProvenanceConsumer.sol";
 
 /// General error for invalid proof.
-error InvalidProof();
+error InvalidMockProof();
 
 /// @title MockWitnessProvenanceConsumer
 /// @author sina.eth
@@ -33,22 +33,12 @@ abstract contract MockWitnessProvenanceConsumer is IWitnessProvenanceConsumer {
     }
 
     /// @inheritdoc IWitnessProvenanceConsumer
-    function verifyProof(uint256, bytes32, bytes32[] calldata, bytes32[] calldata, bytes32) public view {
-        if (!mockVal) revert InvalidProof();
+    function verifyProof(Proof calldata) public view {
+        if (!mockVal) revert InvalidMockProof();
     }
 
     /// @inheritdoc IWitnessProvenanceConsumer
-    function safeVerifyProof(
-        uint256,
-        bytes32,
-        bytes32[] calldata,
-        bytes32[] calldata,
-        bytes32
-    )
-        public
-        view
-        returns (bool)
-    {
+    function safeVerifyProof(Proof calldata) public view returns (bool) {
         return mockVal;
     }
 }

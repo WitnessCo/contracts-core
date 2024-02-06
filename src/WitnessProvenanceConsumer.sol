@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import { IWitness } from "./interfaces/IWitness.sol";
+import { IWitness, Proof } from "./interfaces/IWitness.sol";
 import { IWitnessProvenanceConsumer } from "./interfaces/IWitnessProvenanceConsumer.sol";
 
 /// @title WitnessProvenanceConsumer
@@ -37,31 +37,12 @@ abstract contract WitnessProvenanceConsumer is IWitnessProvenanceConsumer {
     }
 
     /// @inheritdoc IWitnessProvenanceConsumer
-    function verifyProof(
-        uint256 index,
-        bytes32 leaf,
-        bytes32[] calldata leftProof,
-        bytes32[] calldata rightProof,
-        bytes32 targetRoot
-    )
-        public
-        view
-    {
-        WITNESS.verifyProof(index, leaf, leftProof, rightProof, targetRoot);
+    function verifyProof(Proof calldata proof) public view {
+        WITNESS.verifyProof(proof);
     }
 
     /// @inheritdoc IWitnessProvenanceConsumer
-    function safeVerifyProof(
-        uint256 index,
-        bytes32 leaf,
-        bytes32[] calldata leftProof,
-        bytes32[] calldata rightProof,
-        bytes32 targetRoot
-    )
-        public
-        view
-        returns (bool)
-    {
-        return WITNESS.safeVerifyProof(index, leaf, leftProof, rightProof, targetRoot);
+    function safeVerifyProof(Proof calldata proof) public view returns (bool) {
+        return WITNESS.safeVerifyProof(proof);
     }
 }

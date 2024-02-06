@@ -4,24 +4,20 @@ pragma solidity ^0.8.23;
 import { LibBit } from "solady/utils/LibBit.sol";
 import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
 
+import {
+    InvalidProofBadLeftRange,
+    InvalidProofBadRightRange,
+    InvalidProofLeafIdxOutOfBounds,
+    InvalidProofUnrecognizedRoot,
+    InvalidUpdateNewRangeMismatchWrongLength,
+    InvalidUpdateOldRangeMismatchShouldBeEmpty,
+    InvalidUpdateOldRangeMismatchWrongCurrentRoot,
+    InvalidUpdateOldRangeMismatchWrongLength,
+    InvalidUpdateTreeSizeMustGrow,
+    IWitness,
+    Proof
+} from "./interfaces/IWitness.sol";
 import { getRangeSizeForNonZeroBeginningInterval, getRoot, getRootForMergedRange, merge } from "./WitnessUtils.sol";
-import { IWitness } from "./interfaces/IWitness.sol";
-
-/*//////////////////////////////////////////////////////////////
-                        CUSTOM ERRORS
-//////////////////////////////////////////////////////////////*/
-/// Proof verification errors.
-error InvalidProofLeafIdxOutOfBounds();
-error InvalidProofBadLeftRange();
-error InvalidProofBadRightRange();
-error InvalidProofUnrecognizedRoot();
-
-/// Tree update errors.
-error InvalidUpdateOldRangeMismatchShouldBeEmpty();
-error InvalidUpdateOldRangeMismatchWrongCurrentRoot();
-error InvalidUpdateOldRangeMismatchWrongLength();
-error InvalidUpdateTreeSizeMustGrow();
-error InvalidUpdateNewRangeMismatchWrongLength();
 
 /// @title Witness
 /// @author sina.eth
@@ -69,63 +65,44 @@ contract Witness is IWitness, OwnableRoles {
     }
 
     /// @inheritdoc IWitness
-    function verifyProof(
-        uint256 index,
-        bytes32 leaf,
-        bytes32[] calldata leftRange,
-        bytes32[] calldata rightRange,
-        bytes32 targetRoot
-    )
-        external
-        view
-    {
-        uint256 targetTreeSize = rootCache[targetRoot];
-        if (index >= targetTreeSize) {
+    function verifyProof(Proof calldata proof) external view {
+        uint256 targetTreeSize = rootCache[proof.targetRoot];
+        if (proof.index >= targetTreeSize) {
             // Provided index is out of bounds.
             revert InvalidProofLeafIdxOutOfBounds();
         }
         // leftRange covers the interval [0, index);
         // rightRange covers the interval [index + 1, targetTreeSize).
         // Verify the size of the ranges correspond to the right intervals.
-        if (index.popCount() != leftRange.length) {
+        if (proof.index.popCount() != proof.leftRange.length) {
             // Provided left range does not match expected size.
             revert InvalidProofBadLeftRange();
         }
-        if (getRangeSizeForNonZeroBeginningInterval(index + 1, targetTreeSize) != rightRange.length) {
+        if (getRangeSizeForNonZeroBeginningInterval(proof.index + 1, targetTreeSize) != proof.rightRange.length) {
             // Provided right range does not match expected size.
             revert InvalidProofBadRightRange();
         }
         // First merge the leaf into the left and right ranges.
         (bytes32[] calldata mergedLeft, bytes32 seed, bytes32[] calldata mergedRight) = merge(
-            leftRange,
-            leaf,
+            proof.leftRange,
+            proof.leaf,
             /**
              * seedHeight=
              */
             0,
-            index,
-            rightRange,
+            proof.index,
+            proof.rightRange,
             targetTreeSize
         );
-        if (getRootForMergedRange(mergedLeft, seed, mergedRight) != targetRoot) {
+        if (getRootForMergedRange(mergedLeft, seed, mergedRight) != proof.targetRoot) {
             // Root mismatch.
             revert InvalidProofUnrecognizedRoot();
         }
     }
 
     /// @inheritdoc IWitness
-    function safeVerifyProof(
-        uint256 index,
-        bytes32 leaf,
-        bytes32[] calldata leftRange,
-        bytes32[] calldata rightRange,
-        bytes32 targetRoot
-    )
-        external
-        view
-        returns (bool isValid)
-    {
-        try this.verifyProof(index, leaf, leftRange, rightRange, targetRoot) {
+    function safeVerifyProof(Proof calldata proof) external view returns (bool isValid) {
+        try this.verifyProof(proof) {
             isValid = true;
         } catch {
             return false;
