@@ -1,17 +1,4 @@
-# Witness Core Contracts
-
-## TODO(sina) fill this out more
-
-## [Caveat Emptor](https://en.wikipedia.org/wiki/Caveat_emptor)
-
-This is experimental software and is provided on an "as is" and "as available" basis. I do not give any warranties and
-will not be liable for any loss, direct or indirect through continued use of this codebase.
-
-##### Everything below here is from the original template README.
-
----
-
-# Foundry Template [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![Foundry][foundry-badge]][foundry] [![License: MIT][license-badge]][license]
+# Witness Core Contracts [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![Foundry][foundry-badge]][foundry] [![License: MIT][license-badge]][license]
 
 [gitpod]: https://gitpod.io/#https://github.com/WitnessCo/contracts-core
 [gitpod-badge]: https://img.shields.io/badge/Gitpod-Open%20in%20Gitpod-FFB45B?logo=gitpod
@@ -22,197 +9,107 @@ will not be liable for any loss, direct or indirect through continued use of thi
 [license]: https://opensource.org/licenses/MIT
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 
-A Foundry-based template for developing Solidity smart contracts, with sensible defaults.
+This repository contains the core smart contracts for Witness. This includes the contracts used by the operator to submit checkpoints, as well as utilities for reading from and interacting with Witness.
 
-## What's Inside
+The repo is mostly a standard [forge](https://getfoundry.sh) repo but uses [Bun](https://bun.sh) for some utilities as well. Here's an outline of the repo:
 
-- [Forge](https://github.com/foundry-rs/foundry/blob/master/forge): compile, test, fuzz, format, and deploy smart
-  contracts
-- [Forge Std](https://github.com/foundry-rs/forge-std): collection of helpful contracts and cheatcodes for testing
-- [PRBTest](https://github.com/PaulRBerg/prb-test): modern collection of testing assertions and logging utilities
-- [Prettier](https://github.com/prettier/prettier): code formatter for non-Solidity files
-- [Solhint](https://github.com/protofire/solhint): linter for Solidity code
+```text
+broadcast
+  └─ Historical foundry deployment artifacts
+docs
+  └─ Markdown docs generated from the natspec of the contracts
+examples
+  └─ Sample usages of the core contracts
+scripts
+  └─ Utilities for deploying the core contracts
+src
+  ├─ IWitness.sol
+  ├─ IWitnessProvenanceConsumer.sol
+  ├─ MockWitnessProvenanceConsumer.sol
+  ├─ Witness.sol
+  ├─ WitnessProvenanceConsumer.sol
+  └─ WitnessUtils.sol
+test
+  └─ Solidity tests for the core contracts
+ts
+  └─ Typescript code and utils for consumers of the contract
+```
+
+See the Witness docs at [https://docs.witness.co](https://docs.witness.co) for more information on Witness and these contracts.
 
 ## Getting Started
 
-Click the [`Use this template`](https://github.com/WitnessCo/contracts-core/generate) button at the top of the page to
-create a new repository with this repo as the initial state.
+### NPM Install
 
-Or, if you prefer to install the template manually:
+It's recommended to install this via an NPM-ish package manager; eg:
 
 ```sh
-$ mkdir my-project
-$ cd my-project
-$ forge init --template WitnessCo/contracts-core
-$ bun install # install Solhint, Prettier, and other Node.js deps
+bun add @witnessco/contracts-core
 ```
 
-If this is your first time with Foundry, check out the
-[installation](https://github.com/foundry-rs/foundry#installation) instructions.
-
-## Features
-
-This template builds upon the frameworks and libraries mentioned above, so please consult their respective documentation
-for details about their specific features.
-
-For example, if you're interested in exploring Foundry in more detail, you should look at the
-[Foundry Book](https://book.getfoundry.sh/). In particular, you may be interested in reading the
-[Writing Tests](https://book.getfoundry.sh/forge/writing-tests.html) tutorial.
-
-### Sensible Defaults
-
-This template comes with a set of sensible default configurations for you to use. These defaults can be found in the
-following files:
+You may need to set up a `remapping.txt` or similar to get your project's toolchain to detect the contracts:
 
 ```text
-├── .editorconfig
-├── .gitignore
-├── .prettierignore
-├── .prettierrc.yml
-├── .solhint.json
-├── foundry.toml
-└── remappings.txt
+@witnessco/contracts-core=node_modules/@witnessco/contracts-core
 ```
 
-### VSCode Integration
+### Forge Install
 
-This template is IDE agnostic, but for the best user experience, you may want to use it in VSCode alongside Nomic
-Foundation's [Solidity extension](https://marketplace.visualstudio.com/items?itemName=NomicFoundation.hardhat-solidity).
+```sh
+forge install WitnessCo/contracts-core
+```
 
-For guidance on how to integrate a Foundry project in VSCode, please refer to this
-[guide](https://book.getfoundry.sh/config/vscode).
-
-### GitHub Actions
-
-This template comes with GitHub Actions pre-configured. Your contracts will be linted and tested on every push and pull
-request made to the `main` branch.
-
-You can edit the CI script in [.github/workflows/ci.yml](./.github/workflows/ci.yml).
-
-## Installing Dependencies
-
-Foundry typically uses git submodules to manage dependencies, but this template uses Node.js packages because
-[submodules don't scale](https://twitter.com/PaulRBerg/status/1736695487057531328).
-
-This is how to install dependencies:
-
-1. Install the dependency using your preferred package manager, e.g. `bun install dependency-name`
-   - Use this syntax to install from GitHub: `bun install github:username/repo-name`
-2. Add a remapping for the dependency in [remappings.txt](./remappings.txt), e.g.
-   `dependency-name=node_modules/dependency-name`
-
-Note that OpenZeppelin Contracts is pre-installed, so you can follow that as an example.
-
-## Writing Tests
-
-To write a new test contract, you start by importing [PRBTest](https://github.com/PaulRBerg/prb-test) and inherit from
-it in your test contract. PRBTest comes with a pre-instantiated [cheatcodes](https://book.getfoundry.sh/cheatcodes/)
-environment accessible via the `vm` property. If you would like to view the logs in the terminal output you can add the
-`-vvv` flag and use [console.log](https://book.getfoundry.sh/faq?highlight=console.log#how-do-i-use-consolelog).
-
-This template comes with an example test contract [Foo.t.sol](./test/Foo.t.sol)
+### Additional Dependencies
 
 ## Usage
 
-This is a list of the most frequently needed commands.
+Witness's core contracts can be permissionlessly integrated with by other systems on or offchain. Offchain systems can leverage these contracts as a source of truth for verification, while onchain consumers can inherit from the `WitnessProvenanceConsumer` contract for a more seamless integration.
 
-### Build
+See the [examples](./examples) directory for some sample usages of the core contracts.
 
-Build the contracts:
+## Development
 
-```sh
-$ forge build
-```
-
-### Clean
-
-Delete the build artifacts and cache directories:
+Some frequently used commands:
 
 ```sh
-$ forge clean
+# Install dependencies
+bun install
+
+# Build contracts and typescript
+bun run build
+
+# Clean the build artifacts and cache directories
+bun clean
+
+# Lint and format
+bun lint
+
+# Run tests (solidity only)
+forge test
+
+# Generate Typescript ABIs from build artifacts
+bun run build && bun generate:abis
+
+# Gererate docs to the `./docs` directory
+bun generate:docs
+
+# Coverage
+forge coverage
+
+# Coverage report
+bun test:coverage:report
 ```
 
-### Compile
+## Built with
+- [Foundry](https://getfoundry.sh/)
+- [Bun](https://bun.sh)
+- [Solady](https://github.com/Vectorized/solady)
+- [PRB Foundry Template](https://github.com/PaulRBerg/foundry-template)
 
-Compile the contracts:
+## [Caveat Emptor](https://en.wikipedia.org/wiki/Caveat_emptor)
 
-```sh
-$ forge build
-```
-
-### Coverage
-
-Get a test coverage report:
-
-```sh
-$ forge coverage
-```
-
-### Deploy
-
-Deploy to Anvil:
-
-```sh
-$ forge script script/Deploy.s.sol --broadcast --fork-url http://localhost:8545
-```
-
-For this script to work, you need to have a `MNEMONIC` environment variable set to a valid
-[BIP39 mnemonic](https://iancoleman.io/bip39/).
-
-For instructions on how to deploy to a testnet or mainnet, check out the
-[Solidity Scripting](https://book.getfoundry.sh/tutorials/solidity-scripting.html) tutorial.
-
-### Format
-
-Format the contracts:
-
-```sh
-$ forge fmt
-```
-
-### Gas Usage
-
-Get a gas report:
-
-```sh
-$ forge test --gas-report
-```
-
-### Lint
-
-Lint the contracts:
-
-```sh
-$ bun run lint
-```
-
-### Test
-
-Run the tests:
-
-```sh
-$ forge test
-```
-
-Generate test coverage and output result to the terminal:
-
-```sh
-$ bun run test:coverage
-```
-
-Generate test coverage with lcov report (you'll have to open the `./coverage/index.html` file in your browser, to do so
-simply copy paste the path):
-
-```sh
-$ bun run test:coverage:report
-```
-
-## Related Efforts
-
-- [abigger87/femplate](https://github.com/abigger87/femplate)
-- [cleanunicorn/ethereum-smartcontract-template](https://github.com/cleanunicorn/ethereum-smartcontract-template)
-- [foundry-rs/forge-template](https://github.com/foundry-rs/forge-template)
-- [FrankieIsLost/forge-template](https://github.com/FrankieIsLost/forge-template)
+This is experimental software and is provided on an "as is" and "as available" basis. I do not give any warranties and
+will not be liable for any loss, direct or indirect through continued use of this codebase.
 
 ## License
 

@@ -5,7 +5,7 @@ import { LibBit } from "solady/utils/LibBit.sol";
 import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
 
 import { getRangeSizeForNonZeroBeginningInterval, getRoot, getRootForMergedRange, merge } from "./WitnessUtils.sol";
-import { IWitness } from "./IWitness.sol";
+import { IWitness } from "./interfaces/IWitness.sol";
 
 /*//////////////////////////////////////////////////////////////
                         CUSTOM ERRORS

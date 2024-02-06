@@ -3,6 +3,8 @@ cache
 coverage
 node_modules
 out
+dist
+docsTemp
 
 # files
 *.env
@@ -15,6 +17,4 @@ pnpm-lock.yaml
 yarn.lock
 
 # broadcasts
-!broadcast
-broadcast/*
 broadcast/*/31337/

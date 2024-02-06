@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import { IWitness } from "./IWitness.sol";
-import { IWitnessProvenanceConsumer } from "./IWitnessProvenanceConsumer.sol";
+import { IWitness } from "./interfaces/IWitness.sol";
+import { IWitnessProvenanceConsumer } from "./interfaces/IWitnessProvenanceConsumer.sol";
 
 /// @title WitnessProvenanceConsumer
 /// @author sina.eth

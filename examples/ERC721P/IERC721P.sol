@@ -1,22 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import { IWitness } from "./IWitness.sol";
-import { WitnessProvenanceConsumer } from "./WitnessProvenanceConsumer.sol";
-
 /// @title IERC721P
 /// @author sina.eth
 /// @notice Utility mixin for ERC721 adding provenance-related utility methods.
-/// @dev ERC721-P[rovenance] is a 721 token that supports "bridging" provenance of lazy mints via Witness.
-abstract contract IERC721P is WitnessProvenanceConsumer {
-    /*//////////////////////////////////////////////////////////////////////////
-                                     CONSTRUCTOR
-    //////////////////////////////////////////////////////////////////////////*/
-
-    /// @dev Immutably sets the Witness address.
-    /// @param _witness The address that's used as the Witness to verify provenance against.
-    constructor(IWitness _witness) WitnessProvenanceConsumer(_witness) { }
-
+/// @dev ERC721-P[rovenance] is a 721 token that supports "bridging" in provenance of lazy mints via Witness.
+abstract contract IERC721P {
     /*//////////////////////////////////////////////////////////////
                          READ METHODS
     //////////////////////////////////////////////////////////////*/
