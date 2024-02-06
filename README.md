@@ -11,120 +11,98 @@
 
 This repository contains the core smart contracts for Witness. This includes the contracts used by the operator to submit checkpoints, as well as utilities for reading from and interacting with Witness.
 
+The repo is mostly a standard [forge](https://getfoundry.sh) repo but uses [Bun](https://bun.sh) for some utilities as well. Here's an outline of the repo:
+
+```text
+broadcast
+  └─ Historical foundry deployment artifacts
+docs
+  └─ Markdown docs generated from the natspec of the contracts
+examples
+  └─ Sample usages of the core contracts
+scripts
+  └─ Utilities for deploying the core contracts
+src
+  ├─ IWitness.sol
+  ├─ IWitnessProvenanceConsumer.sol
+  ├─ MockWitnessProvenanceConsumer.sol
+  ├─ Witness.sol
+  ├─ WitnessProvenanceConsumer.sol
+  └─ WitnessUtils.sol
+test
+  └─ Solidity tests for the core contracts
+ts
+  └─ Typescript code and utils for consumers of the contract
+```
+
 See the Witness docs at [https://docs.witness.co](https://docs.witness.co) for more information on Witness and these contracts.
 
 ## Getting Started
 
-### Install
+### NPM Install
 
-TODO(sina) fill out more
+It's recommended to install this via an NPM-ish package manager; eg:
 
-## Features
+```sh
+bun add @witnessco/contracts-core
+```
 
-This template builds upon the frameworks and libraries mentioned above, so please consult their respective documentation
-for details about their specific features.
+You may need to set up a `remapping.txt` or similar to get your project's toolchain to detect the contracts:
 
-For example, if you're interested in exploring Foundry in more detail, you should look at the
-[Foundry Book](https://book.getfoundry.sh/). In particular, you may be interested in reading the
-[Writing Tests](https://book.getfoundry.sh/forge/writing-tests.html) tutorial.
+```text
+@witnessco/contracts-core=node_modules/@witnessco/contracts-core
+```
+
+### Forge Install
+
+```sh
+forge install WitnessCo/contracts-core
+```
+
+### Additional Dependencies
 
 ## Usage
 
-This is a list of the most frequently needed commands.
+Witness's core contracts can be permissionlessly integrated with by other systems on or offchain. Offchain systems can leverage these contracts as a source of truth for verification, while onchain consumers can inherit from the `WitnessProvenanceConsumer` contract for a more seamless integration.
 
-### Build
+See the [examples](./examples) directory for some sample usages of the core contracts.
 
-Build the contracts:
+## Development
 
-```sh
-$ forge build
-```
-
-### Clean
-
-Delete the build artifacts and cache directories:
+Some frequently used commands:
 
 ```sh
-$ forge clean
-```
+# Install dependencies
+bun install
 
-### Compile
+# Build contracts and typescript
+bun run build
 
-Compile the contracts:
+# Clean the build artifacts and cache directories
+bun clean
 
-```sh
-$ forge build
-```
+# Lint and format
+bun lint
 
-### Coverage
+# Run tests (solidity only)
+forge test
 
-Get a test coverage report:
+# Generate Typescript ABIs from build artifacts
+bun run build && bun generate:abis
 
-```sh
-$ forge coverage
-```
+# Gererate docs to the `./docs` directory
+bun generate:docs
 
-### Deploy
+# Coverage
+forge coverage
 
-Deploy to Anvil:
-
-```sh
-$ forge script script/Deploy.s.sol --broadcast --fork-url http://localhost:8545
-```
-
-For this script to work, you need to have a `MNEMONIC` environment variable set to a valid
-[BIP39 mnemonic](https://iancoleman.io/bip39/).
-
-For instructions on how to deploy to a testnet or mainnet, check out the
-[Solidity Scripting](https://book.getfoundry.sh/tutorials/solidity-scripting.html) tutorial.
-
-### Format
-
-Format the contracts:
-
-```sh
-$ forge fmt
-```
-
-### Gas Usage
-
-Get a gas report:
-
-```sh
-$ forge test --gas-report
-```
-
-### Lint
-
-Lint the contracts:
-
-```sh
-$ bun run lint
-```
-
-### Test
-
-Run the tests:
-
-```sh
-$ forge test
-```
-
-Generate test coverage and output result to the terminal:
-
-```sh
-$ bun run test:coverage
-```
-
-Generate test coverage with lcov report (you'll have to open the `./coverage/index.html` file in your browser, to do so
-simply copy paste the path):
-
-```sh
-$ bun run test:coverage:report
+# Coverage report
+bun test:coverage:report
 ```
 
 ## Built with
 - [Foundry](https://getfoundry.sh/)
+- [Bun](https://bun.sh)
 - [Solady](https://github.com/Vectorized/solady)
 - [PRB Foundry Template](https://github.com/PaulRBerg/foundry-template)
 
