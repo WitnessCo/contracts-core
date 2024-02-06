@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity ^0.8.23;
 
-import {IWitness} from "./IWitness.sol";
-import {IWitnessProvenanceConsumer} from "./IWitnessProvenanceConsumer.sol";
+import { IWitness } from "./IWitness.sol";
+import { IWitnessProvenanceConsumer } from "./IWitnessProvenanceConsumer.sol";
 
 /// @title MockWitnessProvenanceConsumer
 /// @author sina.eth
@@ -35,7 +35,13 @@ abstract contract MockWitnessProvenanceConsumer is IWitnessProvenanceConsumer {
     }
 
     /// @inheritdoc IWitnessProvenanceConsumer
-    function safeVerifyProof(uint256, bytes32, bytes32[] calldata, bytes32[] calldata, bytes32)
+    function safeVerifyProof(
+        uint256,
+        bytes32,
+        bytes32[] calldata,
+        bytes32[] calldata,
+        bytes32
+    )
         public
         view
         returns (bool)

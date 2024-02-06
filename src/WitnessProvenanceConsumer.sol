@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity ^0.8.23;
 
-import {IWitness} from "./IWitness.sol";
-import {IWitnessProvenanceConsumer} from "./IWitnessProvenanceConsumer.sol";
+import { IWitness } from "./IWitness.sol";
+import { IWitnessProvenanceConsumer } from "./IWitnessProvenanceConsumer.sol";
 
 /// @title WitnessProvenanceConsumer
 /// @author sina.eth
@@ -43,7 +43,10 @@ abstract contract WitnessProvenanceConsumer is IWitnessProvenanceConsumer {
         bytes32[] calldata leftProof,
         bytes32[] calldata rightProof,
         bytes32 targetRoot
-    ) public view {
+    )
+        public
+        view
+    {
         WITNESS.verifyProof(index, leaf, leftProof, rightProof, targetRoot);
     }
 
@@ -54,7 +57,11 @@ abstract contract WitnessProvenanceConsumer is IWitnessProvenanceConsumer {
         bytes32[] calldata leftProof,
         bytes32[] calldata rightProof,
         bytes32 targetRoot
-    ) public view returns (bool) {
+    )
+        public
+        view
+        returns (bool)
+    {
         return WITNESS.safeVerifyProof(index, leaf, leftProof, rightProof, targetRoot);
     }
 }

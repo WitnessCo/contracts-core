@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity ^0.8.23;
 
-import {IWitness} from "./IWitness.sol";
+import { IWitness } from "./IWitness.sol";
 
 /// @title IWitnessProvenanceConsumer
 /// @author sina.eth
@@ -47,7 +47,9 @@ interface IWitnessProvenanceConsumer {
         bytes32[] calldata leftProof,
         bytes32[] calldata rightProof,
         bytes32 targetRoot
-    ) external view;
+    )
+        external
+        view;
 
     /// @notice Checks provenance of a leaf via Witness, returning a boolean instead of throwing for invalid proofs.
     ///
@@ -58,5 +60,8 @@ interface IWitnessProvenanceConsumer {
         bytes32[] calldata leftProof,
         bytes32[] calldata rightProof,
         bytes32 targetRoot
-    ) external view returns (bool);
+    )
+        external
+        view
+        returns (bool);
 }

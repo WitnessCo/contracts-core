@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity ^0.8.23;
 
-import {LibBit} from "solady/utils/LibBit.sol";
-import {OwnableRoles} from "solady/auth/OwnableRoles.sol";
+import { LibBit } from "solady/utils/LibBit.sol";
+import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
 
 import {
     getRangeSizeForNonZeroBeginningInterval,
@@ -11,7 +11,7 @@ import {
     hashToParent,
     merge
 } from "./WitnessUtils.sol";
-import {IWitness} from "./IWitness.sol";
+import { IWitness } from "./IWitness.sol";
 
 /*//////////////////////////////////////////////////////////////
                         CUSTOM ERRORS
@@ -81,7 +81,10 @@ contract Witness is IWitness, OwnableRoles {
         bytes32[] calldata leftRange,
         bytes32[] calldata rightRange,
         bytes32 targetRoot
-    ) external view {
+    )
+        external
+        view
+    {
         uint256 targetTreeSize = rootCache[targetRoot];
         if (index >= targetTreeSize) {
             // Provided index is out of bounds.
@@ -123,10 +126,14 @@ contract Witness is IWitness, OwnableRoles {
         bytes32[] calldata leftRange,
         bytes32[] calldata rightRange,
         bytes32 targetRoot
-    ) external view returns (bool isValid) {
+    )
+        external
+        view
+        returns (bool isValid)
+    {
         try this.verifyProof(index, leaf, leftRange, rightRange, targetRoot) {
             isValid = true;
-        } catch {}
+        } catch { }
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -134,7 +141,11 @@ contract Witness is IWitness, OwnableRoles {
     //////////////////////////////////////////////////////////////*/
 
     /// @inheritdoc IWitness
-    function updateTreeRoot(uint256 newSize, bytes32[] calldata oldRange, bytes32[] calldata newRange)
+    function updateTreeRoot(
+        uint256 newSize,
+        bytes32[] calldata oldRange,
+        bytes32[] calldata newRange
+    )
         external
         onlyRoles(UPDATER_ROLE)
     {

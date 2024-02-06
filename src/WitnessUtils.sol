@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity ^0.8.23;
 
-import {LibBit} from "solady/utils/LibBit.sol";
+import { LibBit } from "solady/utils/LibBit.sol";
 
 /// @notice Helper for calculating range size for a non-zero-starting interval.
 /// @dev The bitmath here decomposes the interval into two parts that in
@@ -66,7 +66,11 @@ function getRoot(bytes32[] calldata hashes) pure returns (bytes32 root) {
 /// @param seed The middle portion of the compact range to merge.
 /// @param rightRange The right portion of the compact range to merge.
 /// @return root The calculated root of the compact range.
-function getRootForMergedRange(bytes32[] calldata leftRange, bytes32 seed, bytes32[] calldata rightRange)
+function getRootForMergedRange(
+    bytes32[] calldata leftRange,
+    bytes32 seed,
+    bytes32[] calldata rightRange
+)
     pure
     returns (bytes32 root)
 {
@@ -120,7 +124,10 @@ function merge(
     uint256 seedIndex,
     bytes32[] calldata rightRange,
     uint256 rightRangeEnd
-) pure returns (bytes32[] calldata left, bytes32 newSeed, bytes32[] calldata right) {
+)
+    pure
+    returns (bytes32[] calldata left, bytes32 newSeed, bytes32[] calldata right)
+{
     uint256 leftCursor = leftRange.length;
     uint256 rightCursor = 0;
     uint256 seedRangeStart = seedIndex * (1 << seedHeight);

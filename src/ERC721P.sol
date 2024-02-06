@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity ^0.8.23;
 
-import {ERC721} from "solady/tokens/ERC721.sol";
+import { ERC721 } from "solady/tokens/ERC721.sol";
 
-import {IWitness} from "./IWitness.sol";
-import {WitnessProvenanceConsumer} from "./WitnessProvenanceConsumer.sol";
-import {IERC721P} from "./IERC721P.sol";
+import { IWitness } from "./IWitness.sol";
+import { WitnessProvenanceConsumer } from "./WitnessProvenanceConsumer.sol";
+import { IERC721P } from "./IERC721P.sol";
 
 /// @title ERC721P
 /// @author sina.eth
@@ -25,7 +25,7 @@ contract ERC721P is ERC721, IERC721P {
 
     /// @dev Immutably sets the Witness address.
     /// @param _witness The address that's used as the Witness to verify provenance against.
-    constructor(IWitness _witness) IERC721P(_witness) {}
+    constructor(IWitness _witness) IERC721P(_witness) { }
 
     /*//////////////////////////////////////////////////////////////
                 READ METHODS - ERC721 OVERRIDES
@@ -84,7 +84,10 @@ contract ERC721P is ERC721, IERC721P {
         bytes32[] calldata leftProof,
         bytes32[] calldata rightProof,
         bytes32 targetRoot
-    ) public override {
+    )
+        public
+        override
+    {
         // NOTICE: this example implementation doesn't impose additional validity checks on the bridgeData.
         //         In a real implementation, you should consider using something like EIP712 or EIP191 for
         //         validating things like:
@@ -97,7 +100,8 @@ contract ERC721P is ERC721, IERC721P {
         verifyProof(leafIndex, getProvenanceHash(bridgeData), leftProof, rightProof, targetRoot);
         idToBridgeData[leafIndex] = bridgeData;
         // Solady's `_safeMint` reverts if the token already exists.
-        // @ https://github.com/Vectorized/solady/blob/dac54a8b24a2e6f598813a613bb3a272ea6dd4f3/src/tokens/ERC721.sol#L500
+        // @
+        // https://github.com/Vectorized/solady/blob/dac54a8b24a2e6f598813a613bb3a272ea6dd4f3/src/tokens/ERC721.sol#L500
         _safeMint(getBridgedOwner(bridgeData), leafIndex);
     }
 }

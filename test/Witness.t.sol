@@ -1,15 +1,15 @@
-// SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.13;
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.23;
 
-import {Test} from "forge-std/Test.sol";
-import {console} from "forge-std/console.sol";
-import {LibBit} from "solady/utils/LibBit.sol";
+import { PRBTest } from "@prb/test/src/PRBTest.sol";
+import { StdUtils } from "forge-std/src/StdUtils.sol";
+import { LibBit } from "solady/utils/LibBit.sol";
 
-import {Witness} from "../src/Witness.sol";
-import {getRoot, hashToParent, decomposeNonZeroInterval} from "../src/WitnessUtils.sol";
+import { Witness } from "../src/Witness.sol";
+import { getRoot, hashToParent, decomposeNonZeroInterval } from "../src/WitnessUtils.sol";
 
-contract WitnessTest is Test {
-    Witness c;
+contract WitnessTest is PRBTest, StdUtils {
+    Witness public c;
     uint256[] public levels;
     uint256[] public indexes;
     bytes32[] public oldRange;

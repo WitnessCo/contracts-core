@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.23;
 
-import {ECDSA} from "solady/utils/ECDSA.sol";
-import {ERC721} from "solady/tokens/ERC721.sol";
+import { ECDSA } from "solady/utils/ECDSA.sol";
+import { ERC721 } from "solady/tokens/ERC721.sol";
 
-import {IWitness} from "./IWitness.sol";
-import {IERC721P} from "./IERC721P.sol";
+import { IWitness } from "./IWitness.sol";
+import { IERC721P } from "./IERC721P.sol";
 
 error WitnessSimpleOpenEdition__OwnerAlreadyMinted();
 
@@ -62,7 +62,9 @@ contract WitnessSimpleOpenEdition is ERC721, IERC721P {
         string memory _symbol,
         string memory _contractURI,
         string memory _basetokenURI
-    ) IERC721P(_witness) {
+    )
+        IERC721P(_witness)
+    {
         __name = _name;
         __symbol = _symbol;
         __contractURI = _contractURI;
@@ -115,7 +117,10 @@ contract WitnessSimpleOpenEdition is ERC721, IERC721P {
         bytes32[] calldata leftProof,
         bytes32[] calldata rightProof,
         bytes32 targetRoot
-    ) public override {
+    )
+        public
+        override
+    {
         // Only EOAs for now.
         address owner = contentURIHash.recover(signature);
         // Check that the owner hasn't already minted.

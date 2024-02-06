@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity ^0.8.23;
 
 import {
     getRangeSizeForNonZeroBeginningInterval,
@@ -28,7 +28,8 @@ interface IWitness {
     //////////////////////////////////////////////////////////////////////////*/
 
     /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
-    /// @dev This mapping is used to keep track of the tree size corresponding to when the contract accepted a given root hash.
+    /// @dev This mapping is used to keep track of the tree size corresponding to when the contract accepted a given
+    /// root hash.
     /// @dev Returns 0 if the root hash is not in the mapping.
     /// @notice param root The root hash for the checkpoint.
     /// @notice return treeSize The tree size corresponding to the root.
@@ -65,7 +66,9 @@ interface IWitness {
         bytes32[] calldata leftRange,
         bytes32[] calldata rightRange,
         bytes32 targetRoot
-    ) external view;
+    )
+        external
+        view;
 
     /// @notice Verifies a proof for a given leaf, returning a boolean instead of throwing for invalid proofs.
     ///
@@ -84,7 +87,10 @@ interface IWitness {
         bytes32[] calldata leftRange,
         bytes32[] calldata rightRange,
         bytes32 targetRoot
-    ) external view returns (bool isValid);
+    )
+        external
+        view
+        returns (bool isValid);
 
     /*//////////////////////////////////////////////////////////////
                               WRITE METHODS

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity ^0.8.23;
 
-import {IWitness} from "./IWitness.sol";
-import {WitnessProvenanceConsumer} from "./WitnessProvenanceConsumer.sol";
+import { IWitness } from "./IWitness.sol";
+import { WitnessProvenanceConsumer } from "./WitnessProvenanceConsumer.sol";
 
 /// @title IERC721P
 /// @author sina.eth
@@ -15,7 +15,7 @@ abstract contract IERC721P is WitnessProvenanceConsumer {
 
     /// @dev Immutably sets the Witness address.
     /// @param _witness The address that's used as the Witness to verify provenance against.
-    constructor(IWitness _witness) WitnessProvenanceConsumer(_witness) {}
+    constructor(IWitness _witness) WitnessProvenanceConsumer(_witness) { }
 
     /*//////////////////////////////////////////////////////////////
                          READ METHODS
@@ -52,5 +52,7 @@ abstract contract IERC721P is WitnessProvenanceConsumer {
         bytes32[] calldata leftProof,
         bytes32[] calldata rightProof,
         bytes32 targetRoot
-    ) public virtual;
+    )
+        public
+        virtual;
 }
