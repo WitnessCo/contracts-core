@@ -1,3 +1,12 @@
+# Witness Core Contracts
+
+## TODO(sina) fill this out more
+
+[Caveat Emptor](https://en.wikipedia.org/wiki/Caveat_emptor): This is experimental software and is provided on an "as is" and "as available" basis. I do not give any warranties and will not be liable for any loss, direct or indirect through continued use of this codebase.
+
+Everything below the following line is from the original template README.
+---
+
 # Foundry Template [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![Foundry][foundry-badge]][foundry] [![License: MIT][license-badge]][license]
 
 [gitpod]: https://gitpod.io/#https://github.com/WitnessCo/contracts-core
