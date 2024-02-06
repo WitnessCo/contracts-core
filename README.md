@@ -1,206 +1,223 @@
-# Foundry Template [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![Foundry][foundry-badge]][foundry] [![License: MIT][license-badge]][license]
+# Witness Core Contracts [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![License: BUSL-1.1][license-badge]][license]
 
-[gitpod]: https://gitpod.io/#https://github.com/PaulRBerg/foundry-template
+[gitpod]: https://gitpod.io/#https://github.com/WitnessCo/contracts-core
 [gitpod-badge]: https://img.shields.io/badge/Gitpod-Open%20in%20Gitpod-FFB45B?logo=gitpod
-[gha]: https://github.com/PaulRBerg/foundry-template/actions
-[gha-badge]: https://github.com/PaulRBerg/foundry-template/actions/workflows/ci.yml/badge.svg
+[gha]: https://github.com/WitnessCo/contracts-core/actions
+[gha-badge]: https://github.com/WitnessCo/contracts-core/actions/workflows/ci.yml/badge.svg
 [foundry]: https://getfoundry.sh/
-[foundry-badge]: https://img.shields.io/badge/Built%20with-Foundry-FFDB1C.svg
-[license]: https://opensource.org/licenses/MIT
-[license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
+[license]: https://spdx.org/licenses/BUSL-1.1.html
+[license-badge]: https://img.shields.io/badge/License-BUSL-blue.svg
 
-A Foundry-based template for developing Solidity smart contracts, with sensible defaults.
+This repo contains the core smart contracts for Witness. This includes the contracts used by the operator to submit checkpoints, as well as utilities for reading from and interacting with Witness.
 
-## What's Inside
+The repo is mostly a standard [forge](https://getfoundry.sh) repo but uses [Bun](https://bun.sh) for some utilities as well. Here's an outline of the repo:
 
-- [Forge](https://github.com/foundry-rs/foundry/blob/master/forge): compile, test, fuzz, format, and deploy smart
-  contracts
-- [Forge Std](https://github.com/foundry-rs/forge-std): collection of helpful contracts and cheatcodes for testing
-- [PRBTest](https://github.com/PaulRBerg/prb-test): modern collection of testing assertions and logging utilities
-- [Prettier](https://github.com/prettier/prettier): code formatter for non-Solidity files
-- [Solhint](https://github.com/protofire/solhint): linter for Solidity code
+```text
+repo
+├── broadcast
+│   └── Historical foundry deployment artifacts
+├── docs
+│   └── Markdown docs generated from the natspec of the contracts
+├── examples
+│   └── Sample usages of the core contracts
+├── scripts
+│   └── Utilities for deploying the core contracts
+├── src
+│   ├── interfaces
+│   │   └── Interfaces for the core contracts
+│   ├── MockWitnessConsumer.sol
+│   ├── Witness.sol
+│   ├── WitnessConsumer.sol
+│   └── WitnessUtils.sol
+├── test
+│   └── Solidity tests for the core contracts
+└── ts
+    └── Typescript code and utils for consumers of the contract
+```
+
+See the Witness docs at [https://docs.witness.co](https://docs.witness.co) for more information on Witness and these contracts.
 
 ## Getting Started
 
-Click the [`Use this template`](https://github.com/PaulRBerg/foundry-template/generate) button at the top of the page to
-create a new repository with this repo as the initial state.
+### NPM Install
 
-Or, if you prefer to install the template manually:
+It's recommended to install this via an NPM-ish package manager; eg:
 
 ```sh
-$ mkdir my-project
-$ cd my-project
-$ forge init --template PaulRBerg/foundry-template
-$ bun install # install Solhint, Prettier, and other Node.js deps
+bun add github:witnessco/contracts-core
 ```
 
-If this is your first time with Foundry, check out the
-[installation](https://github.com/foundry-rs/foundry#installation) instructions.
-
-## Features
-
-This template builds upon the frameworks and libraries mentioned above, so please consult their respective documentation
-for details about their specific features.
-
-For example, if you're interested in exploring Foundry in more detail, you should look at the
-[Foundry Book](https://book.getfoundry.sh/). In particular, you may be interested in reading the
-[Writing Tests](https://book.getfoundry.sh/forge/writing-tests.html) tutorial.
-
-### Sensible Defaults
-
-This template comes with a set of sensible default configurations for you to use. These defaults can be found in the
-following files:
+You may need to set up a `remapping.txt` or similar to get your project's toolchain to detect the contracts:
 
 ```text
-├── .editorconfig
-├── .gitignore
-├── .prettierignore
-├── .prettierrc.yml
-├── .solhint.json
-├── foundry.toml
-└── remappings.txt
+@witnessco/contracts-core=node_modules/@witnessco/contracts-core
 ```
 
-### VSCode Integration
+### Forge Install
 
-This template is IDE agnostic, but for the best user experience, you may want to use it in VSCode alongside Nomic
-Foundation's [Solidity extension](https://marketplace.visualstudio.com/items?itemName=NomicFoundation.hardhat-solidity).
+```sh
+forge install WitnessCo/contracts-core
+```
 
-For guidance on how to integrate a Foundry project in VSCode, please refer to this
-[guide](https://book.getfoundry.sh/config/vscode).
+### Additional Dependencies
 
-### GitHub Actions
-
-This template comes with GitHub Actions pre-configured. Your contracts will be linted and tested on every push and pull
-request made to the `main` branch.
-
-You can edit the CI script in [.github/workflows/ci.yml](./.github/workflows/ci.yml).
-
-## Installing Dependencies
-
-Foundry typically uses git submodules to manage dependencies, but this template uses Node.js packages because
-[submodules don't scale](https://twitter.com/PaulRBerg/status/1736695487057531328).
-
-This is how to install dependencies:
-
-1. Install the dependency using your preferred package manager, e.g. `bun install dependency-name`
-   - Use this syntax to install from GitHub: `bun install github:username/repo-name`
-2. Add a remapping for the dependency in [remappings.txt](./remappings.txt), e.g.
-   `dependency-name=node_modules/dependency-name`
-
-Note that OpenZeppelin Contracts is pre-installed, so you can follow that as an example.
-
-## Writing Tests
-
-To write a new test contract, you start by importing [PRBTest](https://github.com/PaulRBerg/prb-test) and inherit from
-it in your test contract. PRBTest comes with a pre-instantiated [cheatcodes](https://book.getfoundry.sh/cheatcodes/)
-environment accessible via the `vm` property. If you would like to view the logs in the terminal output you can add the
-`-vvv` flag and use [console.log](https://book.getfoundry.sh/faq?highlight=console.log#how-do-i-use-consolelog).
-
-This template comes with an example test contract [Foo.t.sol](./test/Foo.t.sol)
+The contracts in this repo also depend on [Solady](https://github.com/Vectorized/solady) for various utilities. You may need to separately configure this depending on your environment and toolchain; see Solady's docs for more information.
 
 ## Usage
 
-This is a list of the most frequently needed commands.
+Witness's core contracts can be permissionlessly integrated with by other systems on or offchain. Offchain systems can leverage these contracts as a source of truth for verification, while onchain consumers can inherit from the `WitnessConsumer` contract for a more seamless integration.
 
-### Build
+See the [examples](./examples) directory for some sample usages of the core contracts.
 
-Build the contracts:
+## Development
 
-```sh
-$ forge build
-```
-
-### Clean
-
-Delete the build artifacts and cache directories:
+Some frequently used commands:
 
 ```sh
-$ forge clean
+# Install dependencies
+bun install
+
+# Build contracts and typescript
+bun run build
+
+# Clean the build artifacts and cache directories
+bun clean
+
+# Lint and format
+bun lint
+
+# Run tests (solidity only)
+forge test
+
+# Generate Typescript ABIs from build artifacts
+bun run build && bun generate:abis
+
+# Gererate docs to the `./docs` directory
+bun generate:docs
+
+# Coverage
+forge coverage
+
+# Coverage report
+bun test:coverage:report
+
+# Compute the CREATE2 initcode hash for a `Witness` contract.
+export OWNER_ADDRESS=OWNER_ADDRESS_HERE
+bun run initcodehash
 ```
 
-### Compile
+## Deployments
 
-Compile the contracts:
+If you need a deployment on a new chain, feel free to open an issue and we can help you. Additional information is provided below for reference as well.
 
-```sh
-$ forge build
-```
+These values should be kept in-sync with the values provided [the client SDK](https://github.com/WitnessCo/client).
 
-### Coverage
+### Existing deployments
 
-Get a test coverage report:
+| Chain ID                    | Deployment Address                                                                                                                       |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Mainnet (1)                 | [0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a](https://etherscan.io/address/0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a)                    |
+| Base (8453)                 | [0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a](https://base.blockscout.com/address/0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a)             |
+| Optimism (10)               | [0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a](https://optimism.blockscout.com/address/0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a)         |
+| Sepolia (11155111)          | [0x00000008bcf12Eeb9E4162687D6D251f0F4e7FC2](https://eth-sepolia.blockscout.com/address/0x00000008bcf12Eeb9E4162687D6D251f0F4e7FC2)      |
+| Base Sepolia (84532)        | [0x0000000159C8253802551eEaf8b475db1A50d712](https://base-sepolia.blockscout.com/address/0x0000000159C8253802551eEaf8b475db1A50d712)     |
+| Optimism Sepolia (11155420) | [0x0000000a3fa5CFe56b202F376cCa7334c93aEB8b](https://optimism-sepolia.blockscout.com/address/0x0000000a3fa5CFe56b202F376cCa7334c93aEB8b) |
 
-```sh
-$ forge coverage
-```
+### Deploying on a new EVM chain
 
-### Deploy
+Deployment on a new chain involves a few steps:
 
-Deploy to Anvil:
+1. Deploy a Gnosis Safe to be the `owner` param of the deployment (see below for guidance). Set this as the `OWNER_ADDRESS` value in your `.env` file.
+2. Either reuse from below or calculate the CREATE2 deployment salt for the `Witness` contract via the following steps:
+    ```sh
+    cast create2 \
+      --starts-with 0000000 \
+      --init-code-hash $(bun run initcodehash) 
+    ```
+3. Ensure the following environment variables are all set:
 
-```sh
-$ forge script script/Deploy.s.sol --broadcast --fork-url http://localhost:8545
-```
+   a. `DEPLOYMENT_PRIVATE_KEY` is set to a funded EOA
 
-For this script to work, you need to have a `MNEMONIC` environment variable set to a valid
-[BIP39 mnemonic](https://iancoleman.io/bip39/).
+   b. `DEPLOYMENT_SALT` is set to the value calculated in step 2
 
-For instructions on how to deploy to a testnet or mainnet, check out the
-[Solidity Scripting](https://book.getfoundry.sh/tutorials/solidity-scripting.html) tutorial.
+4. Run `Deploy.s.sol`:
+    ```sh
+    forge script Deploy \
+        --broadcast \
+        -f=<YOUR_RPC_URL> \
+        --watch
+    ```
+5. Note down the output values of the above steps into this README:
+    - Any new Gnosis Safe that needed to be deployed, along with any new signers
+    - Create2 factory and salt used for deployment if modified
+    - Deployed address for `Witness.sol`
+6. Add any additional `UPDATER_ROLE` addresses via the `grantRoles` method, called via the owner
+7. Set up your checkpointer to submit updates to the new chain's `Witness.sol` address
 
-### Format
+You may want to take an additional step to verify the deployment on Etherscan or similar.
 
-Format the contracts:
+Note that because we're using a Create2 factory, the EOA you deploy from won't affect the resulting address.
 
-```sh
-$ forge fmt
-```
+### Reference Values
 
-### Gas Usage
+#### Owner Gnosis Safe Signers
 
-Get a gas report:
+All safes use the following singers under a 3-of-5 threshold:
 
-```sh
-$ forge test --gas-report
-```
+- `0x9668aCbF23F0c4BC87B6D843EeEE35C20B91f643`
+- `0x4f31617dc6f154cffba81eb5b9b307b442b3e661`
+- `0x42EE0F3D7E54b6feF329fB6dc860634794832D2F`
+- `0x3e8a785b44d28a9522d16e29158bea1c06d3a762`
+- `0x2e6511E702a256b92Be25580803f93269a1b8E45`
+- `0x72Ff26D9517324eEFA89A48B75c5df41132c4f54`
 
-### Lint
+#### Owner Gnosis Safe Deployments
 
-Lint the contracts:
+`Witness.sol`'s sole deployment parameter is an owner address, which is recommended to be set to a Gnosis Safe.
 
-```sh
-$ bun run lint
-```
+[Smold.app's MultiSafe](https://smold.app/safe) helps us get deterministic Safe addresses for supported chains. The supported chains are as follows:
+- Mainnet (1)
+- Base (8453)
+- Optimism (10)
 
-### Test
+For these chains, given our EOA signers staying fixed across chains, the address for the deployed owner Gnosis Safe is `0x10e859116a6388A7D0540a1bc1247Ae599d24F16`.
 
-Run the tests:
+For chains that the MultiSafe tool doesn't support, we can manually deploy Gnosis Safes without having the address consistent. All chains have their values listed below for reference:
 
-```sh
-$ forge test
-```
+| Chain ID                    | Owner Safe Address                                                                                                                       |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Mainnet (1)                 | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://etherscan.io/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)                    |
+| Base (8453)                 | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://basescan.org/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)                    |
+| Optimism (10)               | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://optimistic.etherscan.io/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)         |
+| Sepolia (11155111)          | [0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83](https://sepolia.etherscan.io/address/0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83)            |
+| Base Sepolia (84532)        | [0xF554f6e21094aDB06680bD49aAB99b622c68CEc0](https://sepolia.basescan.org/address/0xf554f6e21094adb06680bd49aab99b622c68cec0)            |
+| Optimism Sepolia (11155420) | [0xc6Fbdce6Ac57cEbF2032A318D92D0ffFc050A726](https://optimism-sepolia.blockscout.com/address/0xc6Fbdce6Ac57cEbF2032A318D92D0ffFc050A726) |
 
-Generate test coverage and output result to the terminal:
+#### Create2 Factory and Salt
 
-```sh
-$ bun run test:coverage
-```
+When running the deploy script above, a factory address and salt are required for the create2 style deployment. The [default](https://github.com/Arachnid/deterministic-deployment-proxy) factory address is used for this, and the salt is calculated based on the set `OWNER_ADDRESS` with `bun run initcodehash`. Reference values used in previous deployments:
 
-Generate test coverage with lcov report (you'll have to open the `./coverage/index.html` file in your browser, to do so
-simply copy paste the path):
+| Chain ID                    | Salt                                                               |
+| --------------------------- | ------------------------------------------------------------------ |
+| Mainnet (1)                 | 0xb3eaff343f96035800d8b917841ce9c526b3187bdbaa31ca1324d9403cfca860 |
+| Base (8453)                 | 0xb3eaff343f96035800d8b917841ce9c526b3187bdbaa31ca1324d9403cfca860 |
+| Optimism (10)               | 0xb3eaff343f96035800d8b917841ce9c526b3187bdbaa31ca1324d9403cfca860 |
+| Sepolia (11155111)          | 0x25f297d9d4634e6d9b64a5762249df8c841977106db6cfc152c5c261722238e4 |
+| Base Sepolia (84532)        | 0xbee48227768131701635040060883388e02d0cf71f757b851e6a9f3f5517e50d |
+| Optimism Sepolia (11155420) | 0x1af2805263ccc6cb32de029263b124831c7b5666255f7a9c0356e2dfedb7b6e3 |
 
-```sh
-$ bun run test:coverage:report
-```
 
-## Related Efforts
+## Built with
+- [Foundry](https://getfoundry.sh/)
+- [Bun](https://bun.sh)
+- [Solady](https://github.com/Vectorized/solady)
+- [PRB Foundry Template](https://github.com/PaulRBerg/foundry-template)
 
-- [abigger87/femplate](https://github.com/abigger87/femplate)
-- [cleanunicorn/ethereum-smartcontract-template](https://github.com/cleanunicorn/ethereum-smartcontract-template)
-- [foundry-rs/forge-template](https://github.com/foundry-rs/forge-template)
-- [FrankieIsLost/forge-template](https://github.com/FrankieIsLost/forge-template)
+## [Caveat Emptor](https://en.wikipedia.org/wiki/Caveat_emptor)
+
+This is experimental software and is provided on an "as is" and "as available" basis. I do not give any warranties and
+will not be liable for any loss, direct or indirect through continued use of this codebase.
 
 ## License
 
-This project is licensed under MIT.
+This project is licensed under BUSL-1.1.

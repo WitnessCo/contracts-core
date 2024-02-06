@@ -4,6 +4,7 @@ cache
 coverage
 node_modules
 out
+dist
 
 # files
 *.env
@@ -12,6 +13,7 @@ out
 .pnp.*
 bun.lockb
 lcov.info
+package.json
 package-lock.json
 pnpm-lock.yaml
 yarn.lock

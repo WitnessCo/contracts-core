@@ -1,0 +1,5 @@
+DeployTest:testRunCorrectness() (gas: 3133152)
+WitnessTest:testEmptyToSizeOne() (gas: 131390)
+WitnessTest:testEmptyToSizeTwo() (gas: 139383)
+WitnessTest:testFuzzedTreeUpdate(uint256,uint256,uint256) (runs: 1000, μ: 4033376, ~: 4055140)
+WitnessTest:testManuallysafeVerifyProofsForSizeTen() (gas: 805120)
