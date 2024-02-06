@@ -10,43 +10,36 @@ import scrollSepoliaArtifact from "../broadcast/Deploy.s.sol/534351/run-latest.j
 import { desiredContracts, supportedChains } from "./utils";
 
 const artifacts = [
-	baseGoerliArtifact,
-	goerliArtifact,
-	sepoliaArtifact,
-	opSepoliaArtifact,
-	baseSepoliaArtifact,
-	scrollSepoliaArtifact,
+  baseGoerliArtifact,
+  goerliArtifact,
+  sepoliaArtifact,
+  opSepoliaArtifact,
+  baseSepoliaArtifact,
+  scrollSepoliaArtifact,
 ];
 
 // Then, organize them into a single object that can be exported.
 export const deployments: Record<
-	(typeof desiredContracts)[number],
-	Record<(typeof supportedChains)[number]["id"], Address>
+  (typeof desiredContracts)[number],
+  Record<(typeof supportedChains)[number]["id"], Address>
 > = artifacts.reduce(
-	(acc, artifact) => {
-		const { chain, transactions } = artifact;
-		return transactions.reduce((acc, transaction) => {
-			const { contractName, contractAddress } = transaction;
-			if (!isHex(contractAddress)) {
-				throw new Error(
-					`Contract address ${contractAddress} is not a valid hex string`,
-				);
-			}
-			const refinedContractName = desiredContracts.find(
-				(c) => c === contractName,
-			);
-			if (!refinedContractName) {
-				throw new Error(`Contract name ${contractName} is not supported`);
-			}
-			acc[refinedContractName] = {
-				...acc[refinedContractName],
-				[chain]: contractAddress,
-			};
-			return acc;
-		}, acc);
-	},
-	{} as Record<
-		(typeof desiredContracts)[number],
-		Record<(typeof supportedChains)[number]["id"], Address>
-	>,
+  (acc, artifact) => {
+    const { chain, transactions } = artifact;
+    return transactions.reduce((acc, transaction) => {
+      const { contractName, contractAddress } = transaction;
+      if (!isHex(contractAddress)) {
+        throw new Error(`Contract address ${contractAddress} is not a valid hex string`);
+      }
+      const refinedContractName = desiredContracts.find((c) => c === contractName);
+      if (!refinedContractName) {
+        throw new Error(`Contract name ${contractName} is not supported`);
+      }
+      acc[refinedContractName] = {
+        ...acc[refinedContractName],
+        [chain]: contractAddress,
+      };
+      return acc;
+    }, acc);
+  },
+  {} as Record<(typeof desiredContracts)[number], Record<(typeof supportedChains)[number]["id"], Address>>,
 );
