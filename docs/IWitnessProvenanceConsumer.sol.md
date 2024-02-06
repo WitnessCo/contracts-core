@@ -1,19 +1,18 @@
 # IWitnessProvenanceConsumer
+
 [Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/IWitnessProvenanceConsumer.sol)
 
-**Author:**
-sina.eth
+**Author:** sina.eth
 
 Utility mixin for contracts that want to consume provenance.
 
-*See the core Witness.sol contract for more information.*
-
+_See the core Witness.sol contract for more information._
 
 ## Functions
+
 ### WITNESS
 
 Read method for the Witness contract that this contract stores & uses to verify provenance.
-
 
 ```solidity
 function WITNESS() external view returns (IWitness);
@@ -23,35 +22,31 @@ function WITNESS() external view returns (IWitness);
 
 Maps the given bridgeData to its provenance hash representation for verification.
 
-*A default implementation is given here, but it may be overridden by subclasses.
-Provenance hash refers to the hash that Witness uses to verify the provenance of
-some data payload. Intuitively a provenance hash may be a hard-link from the
-bridgeData, like a hash, or perhaps something more sophisticated for certain usecases.*
-
+_A default implementation is given here, but it may be overridden by subclasses. Provenance hash refers to the hash that
+Witness uses to verify the provenance of some data payload. Intuitively a provenance hash may be a hard-link from the
+bridgeData, like a hash, or perhaps something more sophisticated for certain usecases._
 
 ```solidity
 function getProvenanceHash(bytes calldata data) external view returns (bytes32);
 ```
+
 **Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`data`|`bytes`|The data to be mapped to a provenance hash.|
+| Name   | Type    | Description                                 |
+| ------ | ------- | ------------------------------------------- |
+| `data` | `bytes` | The data to be mapped to a provenance hash. |
 
 **Returns**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bytes32`|hash The provenanceHash corresponding to the data.|
-
+| Name     | Type      | Description                                        |
+| -------- | --------- | -------------------------------------------------- |
+| `<none>` | `bytes32` | hash The provenanceHash corresponding to the data. |
 
 ### verifyProof
 
 Checks provenance of a leaf via Witness.
 
-*This method will throw if the proof is invalid, with a custom error
-describing how the verification failed.*
-
+_This method will throw if the proof is invalid, with a custom error describing how the verification failed._
 
 ```solidity
 function verifyProof(
@@ -64,23 +59,22 @@ function verifyProof(
     external
     view;
 ```
+
 **Parameters**
 
-|Name|Type|Description|
-|----|----|-----------|
-|`index`|`uint256`|The index of the leaf to be verified in the tree.|
-|`leaf`|`bytes32`|The leaf to be verified.|
-|`leftProof`|`bytes32[]`|The left range of the proof.|
-|`rightProof`|`bytes32[]`|The right range of the proof.|
-|`targetRoot`|`bytes32`|The root of the tree the proof is being verified against.|
-
+| Name         | Type        | Description                                               |
+| ------------ | ----------- | --------------------------------------------------------- |
+| `index`      | `uint256`   | The index of the leaf to be verified in the tree.         |
+| `leaf`       | `bytes32`   | The leaf to be verified.                                  |
+| `leftProof`  | `bytes32[]` | The left range of the proof.                              |
+| `rightProof` | `bytes32[]` | The right range of the proof.                             |
+| `targetRoot` | `bytes32`   | The root of the tree the proof is being verified against. |
 
 ### safeVerifyProof
 
 Checks provenance of a leaf via Witness, returning a boolean instead of throwing for invalid proofs.
 
-*This method is the same as `verifyProof`, except it returns false instead of throwing.*
-
+_This method is the same as `verifyProof`, except it returns false instead of throwing._
 
 ```solidity
 function safeVerifyProof(
@@ -94,4 +88,3 @@ function safeVerifyProof(
     view
     returns (bool);
 ```
-
