@@ -12,6 +12,8 @@
 	},
 	"devDependencies": {
 		"@prb/test": "^0.6.4",
+		"@types/bun": "^1.0.0",
+		"bun-plugin-dts": "^0.2.1",
 		"forge-std": "github:foundry-rs/forge-std#v1.7.5",
 		"prettier": "^3.0.0",
 		"solhint": "^3.6.2",
@@ -24,7 +26,9 @@
 	},
 	"scripts": {
 		"clean": "rm -rf cache out node_modules",
-		"build": "forge build",
+		"build": "bun run build:sol && bun run build:ts",
+		"build:sol": "forge build",
+		"build:ts": "bun run ts/build.mjs",
 		"lint": "bun run lint:sol && bun run prettier:check",
 		"lint:sol": "forge fmt --check && bun solhint {script,src,test}/**/*.sol",
 		"prettier:check": "prettier --check **/*.{json,md,yml} --ignore-path=.prettierignore",
