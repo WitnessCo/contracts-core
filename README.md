@@ -9,30 +9,31 @@
 [license]: https://opensource.org/licenses/MIT
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 
-This repository contains the core smart contracts for Witness. This includes the contracts used by the operator to submit checkpoints, as well as utilities for reading from and interacting with Witness.
+This repo contains the core smart contracts for Witness. This includes the contracts used by the operator to submit checkpoints, as well as utilities for reading from and interacting with Witness.
 
 The repo is mostly a standard [forge](https://getfoundry.sh) repo but uses [Bun](https://bun.sh) for some utilities as well. Here's an outline of the repo:
 
 ```text
-broadcast
-  └─ Historical foundry deployment artifacts
-docs
-  └─ Markdown docs generated from the natspec of the contracts
-examples
-  └─ Sample usages of the core contracts
-scripts
-  └─ Utilities for deploying the core contracts
-src
-  ├─ IWitness.sol
-  ├─ IWitnessProvenanceConsumer.sol
-  ├─ MockWitnessProvenanceConsumer.sol
-  ├─ Witness.sol
-  ├─ WitnessProvenanceConsumer.sol
-  └─ WitnessUtils.sol
-test
-  └─ Solidity tests for the core contracts
-ts
-  └─ Typescript code and utils for consumers of the contract
+repo
+├── broadcast
+│   └── Historical foundry deployment artifacts
+├── docs
+│   └── Markdown docs generated from the natspec of the contracts
+├── examples
+│   └── Sample usages of the core contracts
+├── scripts
+│   └── Utilities for deploying the core contracts
+├── src
+│   ├── interfaces
+│   │   └── Interfaces for the core contracts
+│   ├── MockWitnessProvenanceConsumer.sol
+│   ├── Witness.sol
+│   ├── WitnessProvenanceConsumer.sol
+│   └── WitnessUtils.sol
+├── test
+│   └── Solidity tests for the core contracts
+└── ts
+    └── Typescript code and utils for consumers of the contract
 ```
 
 See the Witness docs at [https://docs.witness.co](https://docs.witness.co) for more information on Witness and these contracts.
