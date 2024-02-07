@@ -45,9 +45,9 @@ contract Witness is IWitness, OwnableRoles {
     mapping(bytes32 rootHash => RootCache cache) internal _rootCache;
 
     /// @inheritdoc IWitness
-    function rootCache(bytes32 root) external view returns (uint256, uint256) {
+    function rootCache(bytes32 root) external view returns (uint256, uint256, uint256) {
         RootCache memory cache = _rootCache[root];
-        return (cache.treeSize, cache.timestamp);
+        return (cache.treeSize, cache.timestamp, cache.height);
     }
 
     /*//////////////////////////////////////////////////////////////////////////
