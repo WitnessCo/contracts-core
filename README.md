@@ -61,6 +61,8 @@ forge install WitnessCo/contracts-core
 
 ### Additional Dependencies
 
+The contracts in this repo also depend on [Solady](https://github.com/Vectorized/solady) for various utilities. You may need to separately configure this depending on your environment and toolchain; see Solady's docs for more information.
+
 ## Usage
 
 Witness's core contracts can be permissionlessly integrated with by other systems on or offchain. Offchain systems can leverage these contracts as a source of truth for verification, while onchain consumers can inherit from the `WitnessProvenanceConsumer` contract for a more seamless integration.
