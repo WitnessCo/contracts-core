@@ -5,8 +5,9 @@ import { PRBTest } from "@prb/test/src/PRBTest.sol";
 import { StdUtils } from "forge-std/src/StdUtils.sol";
 import { LibBit } from "solady/utils/LibBit.sol";
 
-import { Witness } from "../src/Witness.sol";
-import { getRoot, hashToParent, decomposeNonZeroInterval } from "../src/WitnessUtils.sol";
+import { Proof } from "src/interfaces/IWitness.sol";
+import { Witness } from "src/Witness.sol";
+import { getRoot, hashToParent, decomposeNonZeroInterval } from "src/WitnessUtils.sol";
 
 contract WitnessTest is PRBTest, StdUtils {
     Witness public c;
@@ -60,20 +61,21 @@ contract WitnessTest is PRBTest, StdUtils {
         bytes32[] memory rightProof = new bytes32[](2);
         rightProof[0] = getLeaf(1);
         rightProof[1] = getLeaf(2);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(0), leftProof, rightProof, c.currentRoot()));
+        Proof memory proof = Proof(leafIdx++, getLeaf(0), leftProof, rightProof, c.currentRoot());
+        assertTrue(c.safeVerifyProof(proof));
 
         // leaf1
         leftProof = new bytes32[](1);
         leftProof[0] = getLeaf(0);
         rightProof = new bytes32[](1);
         rightProof[0] = getLeaf(2);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(1), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(1), leftProof, rightProof, c.currentRoot())));
 
         // leaf2
         leftProof = new bytes32[](1);
         leftProof[0] = range[0];
         rightProof = new bytes32[](0);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(2), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(2), leftProof, rightProof, c.currentRoot())));
 
         // Now update the tree to size 10 and re-test proofs.
         // Set up the old and new range, for updating the tree.
@@ -98,7 +100,7 @@ contract WitnessTest is PRBTest, StdUtils {
         rightProof[1] = getInnerNode(1, 1);
         rightProof[2] = getInnerNode(2, 1);
         rightProof[3] = getInnerNode(1, 4);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(0), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(0), leftProof, rightProof, c.currentRoot())));
 
         // leaf1
         leftProof = new bytes32[](1);
@@ -107,7 +109,7 @@ contract WitnessTest is PRBTest, StdUtils {
         rightProof[0] = getInnerNode(1, 1);
         rightProof[1] = getInnerNode(2, 1);
         rightProof[2] = getInnerNode(1, 4);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(1), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(1), leftProof, rightProof, c.currentRoot())));
 
         // leaf2
         leftProof = new bytes32[](1);
@@ -116,7 +118,7 @@ contract WitnessTest is PRBTest, StdUtils {
         rightProof[0] = getLeaf(3);
         rightProof[1] = getInnerNode(2, 1);
         rightProof[2] = getInnerNode(1, 4);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(2), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(2), leftProof, rightProof, c.currentRoot())));
 
         // leaf3
         leftProof = new bytes32[](2);
@@ -125,7 +127,7 @@ contract WitnessTest is PRBTest, StdUtils {
         rightProof = new bytes32[](2);
         rightProof[0] = getInnerNode(2, 1);
         rightProof[1] = getInnerNode(1, 4);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(3), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(3), leftProof, rightProof, c.currentRoot())));
 
         // leaf4
         leftProof = new bytes32[](1);
@@ -134,7 +136,7 @@ contract WitnessTest is PRBTest, StdUtils {
         rightProof[0] = getLeaf(5);
         rightProof[1] = getInnerNode(1, 3);
         rightProof[2] = getInnerNode(1, 4);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(4), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(4), leftProof, rightProof, c.currentRoot())));
 
         // leaf5
         leftProof = new bytes32[](2);
@@ -143,7 +145,7 @@ contract WitnessTest is PRBTest, StdUtils {
         rightProof = new bytes32[](2);
         rightProof[0] = getInnerNode(1, 3);
         rightProof[1] = getInnerNode(1, 4);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(5), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(5), leftProof, rightProof, c.currentRoot())));
 
         // leaf6
         leftProof = new bytes32[](2);
@@ -152,7 +154,7 @@ contract WitnessTest is PRBTest, StdUtils {
         rightProof = new bytes32[](2);
         rightProof[0] = getLeaf(7);
         rightProof[1] = getInnerNode(1, 4);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(6), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(6), leftProof, rightProof, c.currentRoot())));
 
         // leaf7
         leftProof = new bytes32[](3);
@@ -161,21 +163,21 @@ contract WitnessTest is PRBTest, StdUtils {
         leftProof[2] = getLeaf(6);
         rightProof = new bytes32[](1);
         rightProof[0] = getInnerNode(1, 4);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(7), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(7), leftProof, rightProof, c.currentRoot())));
 
         // leaf8
         leftProof = new bytes32[](1);
         leftProof[0] = getInnerNode(3, 0);
         rightProof = new bytes32[](1);
         rightProof[0] = getLeaf(9);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(8), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(8), leftProof, rightProof, c.currentRoot())));
 
         // leaf9
         leftProof = new bytes32[](2);
         leftProof[0] = getInnerNode(3, 0);
         leftProof[1] = getLeaf(8);
         rightProof = new bytes32[](0);
-        assertTrue(c.safeVerifyProof(leafIdx++, getLeaf(9), leftProof, rightProof, c.currentRoot()));
+        assertTrue(c.safeVerifyProof(Proof(leafIdx++, getLeaf(9), leftProof, rightProof, c.currentRoot())));
 
         // Now try updating the tree to size 12, for fun.
         oldRange = new bytes32[](2);

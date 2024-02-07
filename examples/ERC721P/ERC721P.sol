@@ -2,9 +2,9 @@
 pragma solidity ^0.8.23;
 
 import { ERC721 } from "solady/tokens/ERC721.sol";
-import { IWitness } from "src/interfaces/IWitness.sol";
-import { WitnessProvenanceConsumer } from "src/WitnessProvenanceConsumer.sol";
 
+import { IWitness, Proof } from "src/interfaces/IWitness.sol";
+import { WitnessProvenanceConsumer } from "src/WitnessProvenanceConsumer.sol";
 import { IERC721P } from "./IERC721P.sol";
 
 /// @title ERC721P
@@ -97,7 +97,7 @@ contract ERC721P is ERC721, IERC721P, WitnessProvenanceConsumer {
         //         - the data was intended to be used on this chain
         //         - the data was intended to be used by this version of the contract
         //         - etc.
-        verifyProof(leafIndex, getProvenanceHash(bridgeData), leftProof, rightProof, targetRoot);
+        this.verifyProof(Proof(leafIndex, getProvenanceHash(bridgeData), leftProof, rightProof, targetRoot));
         idToBridgeData[leafIndex] = bridgeData;
         // Solady's `_safeMint` reverts if the token already exists.
         // @

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import { IWitness } from "./IWitness.sol";
+import { IWitness, Proof } from "./IWitness.sol";
 
 /// @title IWitnessProvenanceConsumer
 /// @author sina.eth
@@ -36,32 +36,11 @@ interface IWitnessProvenanceConsumer {
     /// @dev This method will throw if the proof is invalid, with a custom error
     ///      describing how the verification failed.
     ///
-    /// @param index The index of the leaf to be verified in the tree.
-    /// @param leaf The leaf to be verified.
-    /// @param leftProof The left range of the proof.
-    /// @param rightProof The right range of the proof.
-    /// @param targetRoot The root of the tree the proof is being verified against.
-    function verifyProof(
-        uint256 index,
-        bytes32 leaf,
-        bytes32[] calldata leftProof,
-        bytes32[] calldata rightProof,
-        bytes32 targetRoot
-    )
-        external
-        view;
+    /// @param proof The proof to be verified.
+    function verifyProof(Proof calldata proof) external view;
 
     /// @notice Checks provenance of a leaf via Witness, returning a boolean instead of throwing for invalid proofs.
     ///
     /// @dev This method is the same as `verifyProof`, except it returns false instead of throwing.
-    function safeVerifyProof(
-        uint256 index,
-        bytes32 leaf,
-        bytes32[] calldata leftProof,
-        bytes32[] calldata rightProof,
-        bytes32 targetRoot
-    )
-        external
-        view
-        returns (bool);
+    function safeVerifyProof(Proof calldata proof) external view returns (bool);
 }

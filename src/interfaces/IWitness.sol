@@ -1,6 +1,37 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
+/*//////////////////////////////////////////////////////////////
+                        CUSTOM ERRORS
+//////////////////////////////////////////////////////////////*/
+/// Proof verification errors.
+error InvalidProofLeafIdxOutOfBounds();
+error InvalidProofBadLeftRange();
+error InvalidProofBadRightRange();
+error InvalidProofUnrecognizedRoot();
+
+/// Tree update errors.
+error InvalidUpdateOldRangeMismatchShouldBeEmpty();
+error InvalidUpdateOldRangeMismatchWrongCurrentRoot();
+error InvalidUpdateOldRangeMismatchWrongLength();
+error InvalidUpdateTreeSizeMustGrow();
+error InvalidUpdateNewRangeMismatchWrongLength();
+
+/// @title Proof
+/// @notice A proof for a given leaf in a merkle mountain range.
+struct Proof {
+    // The index of the leaf to be verified in the tree.
+    uint256 index;
+    // The leaf to be verified.
+    bytes32 leaf;
+    // The left range of the proof.
+    bytes32[] leftRange;
+    // The right range of the proof.
+    bytes32[] rightRange;
+    // The root of the tree the proof is being verified against.
+    bytes32 targetRoot;
+}
+
 /// @title IWitness
 /// @author sina.eth
 /// @notice Interface for the core Witness smart contract.
@@ -47,42 +78,16 @@ interface IWitness {
     /// - For invalid proofs, this method will throw with an error indicating why the proof failed to validate.
     /// - The proof must validate against a checkpoint the contract has previously accepted.
     ///
-    /// @param index The index of the leaf to be verified in the tree.
-    /// @param leaf The leaf to be verified.
-    /// @param leftRange The left range of the proof.
-    /// @param rightRange The right range of the proof.
-    /// @param targetRoot The root of the tree the proof is being verified against.
-    function verifyProof(
-        uint256 index,
-        bytes32 leaf,
-        bytes32[] calldata leftRange,
-        bytes32[] calldata rightRange,
-        bytes32 targetRoot
-    )
-        external
-        view;
+    /// @param proof The proof to be verified.
+    function verifyProof(Proof calldata proof) external view;
 
     /// @notice Verifies a proof for a given leaf, returning a boolean instead of throwing for invalid proofs.
     ///
     /// @dev This method is a wrapper around `verifyProof` that catches any errors and returns false instead.
     ///      The params and logic are otherwise the same as `verifyProof`.
     ///
-    /// @param index The index of the leaf to be verified in the tree.
-    /// @param leaf The leaf to be verified.
-    /// @param leftRange The left range of the proof.
-    /// @param rightRange The right range of the proof.
-    /// @param targetRoot The root of the tree the proof is being verified against.
-    /// @return isValid Whether the proof is valid.
-    function safeVerifyProof(
-        uint256 index,
-        bytes32 leaf,
-        bytes32[] calldata leftRange,
-        bytes32[] calldata rightRange,
-        bytes32 targetRoot
-    )
-        external
-        view
-        returns (bool isValid);
+    /// @param proof The proof to be verified.
+    function safeVerifyProof(Proof calldata proof) external view returns (bool isValid);
 
     /*//////////////////////////////////////////////////////////////
                               WRITE METHODS
