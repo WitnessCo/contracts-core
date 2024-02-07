@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import { IWitness, Proof } from "./interfaces/IWitness.sol";
-import { IWitnessConsumer } from "./interfaces/IWitnessConsumer.sol";
+import { IWitness, Proof } from "../src/interfaces/IWitness.sol";
+import { IWitnessConsumer } from "../src/interfaces/IWitnessConsumer.sol";
 
 /// General error for invalid proof.
 error InvalidMockProof();
