@@ -1,6 +1,6 @@
-# IWitnessProvenanceConsumer
+# IWitnessConsumer
 
-[Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/IWitnessProvenanceConsumer.sol)
+[Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/IWitnessConsumer.sol)
 
 **Author:** sina.eth
 

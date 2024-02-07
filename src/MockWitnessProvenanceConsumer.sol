@@ -2,21 +2,21 @@
 pragma solidity ^0.8.23;
 
 import { IWitness, Proof } from "./interfaces/IWitness.sol";
-import { IWitnessProvenanceConsumer } from "./interfaces/IWitnessProvenanceConsumer.sol";
+import { IWitnessConsumer } from "./interfaces/IWitnessConsumer.sol";
 
 /// General error for invalid proof.
 error InvalidMockProof();
 
-/// @title MockWitnessProvenanceConsumer
+/// @title MockWitnessConsumer
 /// @author sina.eth
 /// @notice Test and prototyping utility for contracts that want to consume provenance.
-/// @dev See IWitnessProvenanceConsumer.sol for more information.
-abstract contract MockWitnessProvenanceConsumer is IWitnessProvenanceConsumer {
+/// @dev See IWitnessConsumer.sol for more information.
+abstract contract MockWitnessConsumer is IWitnessConsumer {
     /*//////////////////////////////////////////////////////////////////////////
                                    PUBLIC STORAGE
     //////////////////////////////////////////////////////////////////////////*/
 
-    /// @inheritdoc IWitnessProvenanceConsumer
+    /// @inheritdoc IWitnessConsumer
     IWitness public constant WITNESS = IWitness(address(0));
 
     /// @dev Value to return from mock verify functions.
@@ -27,17 +27,17 @@ abstract contract MockWitnessProvenanceConsumer is IWitnessProvenanceConsumer {
         mockVal = _mockVal;
     }
 
-    /// @inheritdoc IWitnessProvenanceConsumer
+    /// @inheritdoc IWitnessConsumer
     function getProvenanceHash(bytes calldata data) public view virtual returns (bytes32) {
         return keccak256(data);
     }
 
-    /// @inheritdoc IWitnessProvenanceConsumer
+    /// @inheritdoc IWitnessConsumer
     function verifyProof(Proof calldata) public view {
         if (!mockVal) revert InvalidMockProof();
     }
 
-    /// @inheritdoc IWitnessProvenanceConsumer
+    /// @inheritdoc IWitnessConsumer
     function safeVerifyProof(Proof calldata) public view returns (bool) {
         return mockVal;
     }
