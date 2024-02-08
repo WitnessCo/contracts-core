@@ -6,10 +6,11 @@ import { BaseScript } from "./Base.s.sol";
 
 /// @dev See the Solidity Scripting tutorial: https://book.getfoundry.sh/tutorials/solidity-scripting
 contract Deploy is BaseScript {
-    function run() public broadcast returns (Witness witness) {
-        uint256 deployerPrivateKey = vm.envUint("ETH_PRIVATE_KEY");
-        vm.startBroadcast(deployerPrivateKey);
-        witness = new Witness(vm.addr(deployerPrivateKey));
-        vm.stopBroadcast();
+    function run() public returns (Witness witness) {
+        uint256 deployerKey = vm.envUint("DEPLOYMENT_PRIVATE_KEY");
+        bytes32 salt = vm.envBytes32("DEPLOYMENT_SALT");
+        address deployer = vm.addr(deployerKey);
+        vm.broadcast();
+        witness =  new Witness{ salt: salt }(deployer);
     }
 }
