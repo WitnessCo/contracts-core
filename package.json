@@ -36,6 +36,7 @@
     "generate:abis": "bun run ts/genAbis.ts",
     "generate:docs": "forge doc --out docsTemp && bun run ts/genDocs.ts",
     "test": "forge test",
+    "ctest": "clear && forge test",
     "test:coverage": "forge coverage",
     "test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage"
   }
