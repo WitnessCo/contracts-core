@@ -38,10 +38,10 @@ contract Witness is IWitness, OwnableRoles {
                                 MUTABLE STORAGE
     //////////////////////////////////////////////////////////////////////////*/
 
-    /// @notice A array containing every checkpointed root hash.
+    /// @dev A array containing every checkpointed root hash.
     mapping(uint256 nonce => bytes32 rootHash) internal _roots;
 
-    /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
+    /// @dev A mapping of checkpointed root hashes to their corresponding tree sizes.
     mapping(bytes32 rootHash => RootCache cache) internal _rootCache;
 
     /// @inheritdoc IWitness
@@ -53,6 +53,11 @@ contract Witness is IWitness, OwnableRoles {
         unchecked {
             return _roots[totalRoots - 1];
         }
+    }
+
+    /// @inheritdoc IWitness
+    function roots(uint256 nonce) public view returns (bytes32) {
+        return _roots[nonce];
     }
 
     /// @inheritdoc IWitness
