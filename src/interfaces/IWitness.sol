@@ -63,12 +63,14 @@ interface IWitness {
     function currentRoot() external view returns (bytes32);
 
     /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
-    /// @dev This mapping is used to keep track of the tree size corresponding to when the contract accepted a given
-    /// root hash.
+    /// @dev This mapping is used to keep track of the tree size corresponding to when 
+    /// the contract accepted a given root hash.
     /// @dev Returns 0 if the root hash is not in the mapping.
-    /// @notice param root The root hash for the checkpoint.
-    /// @notice return treeSize The tree size corresponding to the root.
-    function rootCache(bytes32 root) external view returns (uint256, uint256);
+    /// @param root The root hash for the checkpoint.
+    /// @return return treeSize The tree size corresponding to the root.
+    /// @return timestamp The `block.timestamp` the update was made.
+    /// @return block The `block.timestamp` the update was made.
+    function rootCache(bytes32 root) external view returns (uint256, uint256, uint256);
 
     /*//////////////////////////////////////////////////////////////
                          READ METHODS

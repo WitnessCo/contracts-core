@@ -21,7 +21,7 @@ contract WitnessTest is PRBTest, StdUtils {
     }
 
     function testEmptyToSizeOne() public {
-        (uint256 _size,) = c.rootCache(c.currentRoot());
+        (uint256 _size,,) = c.rootCache(c.currentRoot());
         assertEq(_size, 0);
         newRange = new bytes32[](1);
         newRange[0] = bytes32(uint256(1));
@@ -34,7 +34,7 @@ contract WitnessTest is PRBTest, StdUtils {
     }
 
     function testEmptyToSizeTwo() public {
-        (uint256 _size,) = c.rootCache(c.currentRoot());
+        (uint256 _size,,) = c.rootCache(c.currentRoot());
         assertEq(_size, 0);
         bytes32[] memory rangeOne = new bytes32[](1);
         rangeOne[0] = bytes32(uint256(1));
