@@ -45,6 +45,7 @@ contract Witness is IWitness, OwnableRoles {
     mapping(bytes32 rootHash => RootCache cache) internal _rootCache;
 
     /// @inheritdoc IWitness
+    /// @dev Additional storage can be packed with totalRoots.
     uint256 public totalRoots;
 
     /// @inheritdoc IWitness
