@@ -35,7 +35,7 @@ struct Proof {
 /// @title RootCache
 /// @notice A packed 32 byte value containing info for any given root.
 struct RootCache {
-    uint216 treeSize;
+    uint176 treeSize;
     uint48 timestamp;
     uint32 height;
 }
@@ -58,12 +58,15 @@ interface IWitness {
                                    PUBLIC STORAGE
     //////////////////////////////////////////////////////////////////////////*/
 
+    /// @notice The total amount of roots that have been checkpointed.
+    function totalRoots() external view returns (uint256);
+
     /// @notice The current root hash.
     /// @dev This is the root hash of the most recently accepted update.
     function currentRoot() external view returns (bytes32);
 
     /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
-    /// @dev This mapping is used to keep track of the tree size corresponding to when 
+    /// @dev This mapping is used to keep track of the tree size corresponding to when
     /// the contract accepted a given root hash.
     /// @dev Returns 0 if the root hash is not in the mapping.
     /// @param root The root hash for the checkpoint.

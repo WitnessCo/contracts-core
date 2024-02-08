@@ -31,21 +31,31 @@ contract Witness is IWitness, OwnableRoles {
     /*//////////////////////////////////////////////////////////////////////////
                                    CONSTANTS
     //////////////////////////////////////////////////////////////////////////*/
+
     uint256 public constant UPDATER_ROLE = _ROLE_0;
 
     /*//////////////////////////////////////////////////////////////////////////
                                 MUTABLE STORAGE
     //////////////////////////////////////////////////////////////////////////*/
 
-    /// @notice The current root hash.
-    /// @inheritdoc IWitness
-    bytes32 public currentRoot;
+    /// @notice A array containing every checkpointed root hash.
+    mapping(uint256 nonce => bytes32 rootHash) internal _roots;
 
     /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
     mapping(bytes32 rootHash => RootCache cache) internal _rootCache;
 
     /// @inheritdoc IWitness
-    function rootCache(bytes32 root) external view returns (uint256, uint256, uint256) {
+    uint256 public totalRoots;
+
+    /// @inheritdoc IWitness
+    function currentRoot() public view returns (bytes32) {
+        unchecked {
+            return _roots[totalRoots - 1];
+        }
+    }
+
+    /// @inheritdoc IWitness
+    function rootCache(bytes32 root) public view returns (uint256, uint256, uint256) {
         RootCache memory cache = _rootCache[root];
         return (cache.treeSize, cache.timestamp, cache.height);
     }
@@ -67,23 +77,24 @@ contract Witness is IWitness, OwnableRoles {
 
     /// @inheritdoc IWitness
     function getCurrentTreeState() external view returns (bytes32, uint256, uint256, uint256) {
-        RootCache memory cache = _rootCache[currentRoot];
-        return (currentRoot, cache.treeSize, cache.timestamp, cache.height);
+        bytes32 _currentRoot = currentRoot();
+        RootCache memory cache = _rootCache[_currentRoot];
+        return (_currentRoot, cache.treeSize, cache.timestamp, cache.height);
     }
 
     /// @inheritdoc IWitness
     function getCurrentTreeSize() external view returns (uint256) {
-        return _rootCache[currentRoot].treeSize;
+        return _rootCache[currentRoot()].treeSize;
     }
 
     /// @inheritdoc IWitness
     function getLastUpdateTime() external view returns (uint256) {
-        return _rootCache[currentRoot].timestamp;
+        return _rootCache[currentRoot()].timestamp;
     }
 
     /// @inheritdoc IWitness
     function getLastUpdateBlock() external view returns (uint256) {
-        return _rootCache[currentRoot].height;
+        return _rootCache[currentRoot()].height;
     }
 
     /// @inheritdoc IWitness
@@ -144,7 +155,7 @@ contract Witness is IWitness, OwnableRoles {
         external
         onlyRoles(UPDATER_ROLE)
     {
-        bytes32 _currentRoot = currentRoot;
+        bytes32 _currentRoot = currentRoot();
         // ---HANDLE EMPTY TREE CASE---
         if (_currentRoot == bytes32(0)) {
             // Old range should be empty.
@@ -159,8 +170,10 @@ contract Witness is IWitness, OwnableRoles {
             }
             // Update the tree state.
             bytes32 root = getRoot(newRange);
-            currentRoot = root;
-            _rootCache[root] = RootCache(uint216(newSize), uint48(block.timestamp), uint32(block.number));
+            unchecked {
+                _roots[totalRoots++] = root;
+            }
+            _rootCache[root] = RootCache(uint176(newSize), uint48(block.timestamp), uint32(block.number));
             emit RootUpdated(root, newSize);
             return;
         }
@@ -204,8 +217,10 @@ contract Witness is IWitness, OwnableRoles {
         bytes32 newRoot = getRootForMergedRange(mergedLeft, newSeed, mergedRight);
 
         // ---HANDLE UPDATE PT 2. UPDATE STATE & EMIT EVENTS---
-        currentRoot = newRoot;
-        _rootCache[newRoot] = RootCache(uint216(newSize), uint48(block.timestamp), uint32(block.number));
+        unchecked {
+            _roots[totalRoots++] = newRoot;
+        }
+        _rootCache[newRoot] = RootCache(uint176(newSize), uint48(block.timestamp), uint32(block.number));
         emit RootUpdated(newRoot, newSize);
     }
 }
