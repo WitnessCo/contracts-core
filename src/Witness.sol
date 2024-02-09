@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import { LibBit } from "solady/utils/LibBit.sol";
+import { SafeCastLib } from "solady/utils/SafeCastLib.sol";
 import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
 
 import {
@@ -26,6 +27,7 @@ import { getRangeSizeForNonZeroBeginningInterval, getRoot, getRootForMergedRange
 /// @dev The Witness smart contract tracks a merkle mountain range and enforces
 ///      that any newly posted merkle root is consistent with the previous root.
 contract Witness is IWitness, OwnableRoles {
+    using SafeCastLib for uint256;
     using LibBit for uint256;
 
     /*//////////////////////////////////////////////////////////////////////////
@@ -169,7 +171,7 @@ contract Witness is IWitness, OwnableRoles {
             unchecked {
                 roots[totalRoots++] = root;
             }
-            rootInfo[root] = RootInfo(uint176(newSize), uint48(block.timestamp), uint32(block.number));
+            rootInfo[root] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
             emit RootUpdated(root, newSize);
             return;
         }
@@ -216,7 +218,7 @@ contract Witness is IWitness, OwnableRoles {
         unchecked {
             roots[totalRoots++] = newRoot;
         }
-        rootInfo[newRoot] = RootInfo(uint176(newSize), uint48(block.timestamp), uint32(block.number));
+        rootInfo[newRoot] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
         emit RootUpdated(newRoot, newSize);
     }
 }
