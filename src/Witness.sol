@@ -41,26 +41,18 @@ contract Witness is IWitness, OwnableRoles {
     //////////////////////////////////////////////////////////////////////////*/
 
     /// @inheritdoc IWitness
-    /// @dev Additional storage can be packed with totalRoots.
-    uint256 public totalRoots;
+    bytes32 public currentRoot;
+
+    mapping(bytes32 root => RootInfo cache) internal _rootInfo;
 
     /// @inheritdoc IWitness
-    /// @dev A array containing every checkpointed root hash.
-    mapping(uint256 nonce => bytes32 rootHash) public roots;
-
-    /// @dev A mapping of checkpointed root hashes to their corresponding tree sizes.
-    mapping(bytes32 rootHash => RootInfo cache) public rootInfo;
-
-    /// @inheritdoc IWitness
-    function currentRoot() public view virtual returns (bytes32) {
-        unchecked {
-            return roots[totalRoots - 1];
-        }
+    function rootInfo(bytes32 root) public view virtual returns (RootInfo memory) {
+        return _rootInfo[root];
     }
 
     /// @inheritdoc IWitness
     function rootCache(bytes32 root) public view virtual returns (uint256) {
-        return rootInfo[root].treeSize;
+        return _rootInfo[root].treeSize;
     }
 
     /*//////////////////////////////////////////////////////////////////////////
@@ -80,23 +72,23 @@ contract Witness is IWitness, OwnableRoles {
 
     /// @inheritdoc IWitness
     function getCurrentTreeState() external view virtual returns (bytes32, uint256) {
-        bytes32 _currentRoot = currentRoot();
-        return (_currentRoot, rootInfo[_currentRoot].treeSize);
+        bytes32 _currentRoot = currentRoot;
+        return (_currentRoot, _rootInfo[_currentRoot].treeSize);
     }
 
     /// @inheritdoc IWitness
     function getLastUpdateTime() external view virtual returns (uint256) {
-        return rootInfo[currentRoot()].timestamp;
+        return _rootInfo[currentRoot].timestamp;
     }
 
     /// @inheritdoc IWitness
     function getLastUpdateBlock() external view virtual returns (uint256) {
-        return rootInfo[currentRoot()].height;
+        return _rootInfo[currentRoot].height;
     }
 
     /// @inheritdoc IWitness
     function verifyProof(Proof calldata proof) external view virtual {
-        uint256 targetTreeSize = rootInfo[proof.targetRoot].treeSize;
+        uint256 targetTreeSize = _rootInfo[proof.targetRoot].treeSize;
         if (proof.index >= targetTreeSize) {
             // Provided index is out of bounds.
             revert InvalidProofLeafIdxOutOfBounds();
@@ -153,7 +145,7 @@ contract Witness is IWitness, OwnableRoles {
         virtual
         onlyRoles(UPDATER_ROLE)
     {
-        bytes32 _currentRoot = currentRoot();
+        bytes32 _currentRoot = currentRoot;
         // ---HANDLE EMPTY TREE CASE---
         if (_currentRoot == bytes32(0)) {
             // Old range should be empty.
@@ -168,10 +160,8 @@ contract Witness is IWitness, OwnableRoles {
             }
             // Update the tree state.
             bytes32 root = getRoot(newRange);
-            unchecked {
-                roots[totalRoots++] = root;
-            }
-            rootInfo[root] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
+            currentRoot = root;
+            _rootInfo[root] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
             emit RootUpdated(root, newSize);
             return;
         }
@@ -181,7 +171,7 @@ contract Witness is IWitness, OwnableRoles {
             // Provided old range does not match current root.
             revert InvalidUpdateOldRangeMismatchWrongCurrentRoot();
         }
-        uint256 currentSize = rootInfo[_currentRoot].treeSize;
+        uint256 currentSize = _rootInfo[_currentRoot].treeSize;
         // Verify size of oldRange corresponds to the size of the old root.
         if (currentSize.popCount() != oldRange.length) {
             // Provided old range does not match current tree size.
@@ -215,10 +205,8 @@ contract Witness is IWitness, OwnableRoles {
         bytes32 newRoot = getRootForMergedRange(mergedLeft, newSeed, mergedRight);
 
         // ---HANDLE UPDATE PT 2. UPDATE STATE & EMIT EVENTS---
-        unchecked {
-            roots[totalRoots++] = newRoot;
-        }
-        rootInfo[newRoot] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
+        currentRoot = newRoot;
+        _rootInfo[newRoot] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
         emit RootUpdated(newRoot, newSize);
     }
 }

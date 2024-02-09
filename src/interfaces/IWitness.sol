@@ -58,17 +58,14 @@ interface IWitness {
                                    PUBLIC STORAGE
     //////////////////////////////////////////////////////////////////////////*/
 
-    /// @notice The total amount of roots that have been checkpointed.
-    function totalRoots() external view returns (uint256);
-
-    /// @notice A array containing every checkpointed root hash.
-    /// @param nonce The number of total updates at the root you want to find.
-    /// @return rootHash The root hash for the given update nonce.
-    function roots(uint256 nonce) external view returns (bytes32);
-
     /// @notice The current root hash.
     /// @dev This is the root hash of the most recently accepted update.
     function currentRoot() external view returns (bytes32);
+
+    /// @notice A Mapping of checkpointed root hashes to their corresponding tree data.
+    /// @param root The root hash for the checkpoint.
+    /// @return info The `RootInfo` struct containing info about the root hash checkpoint.
+    function rootInfo(bytes32 root) external view returns (RootInfo memory);
 
     /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
     /// @dev This mapping is used to keep track of the tree size corresponding to when
