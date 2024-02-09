@@ -8,7 +8,7 @@ import { Deploy, Witness } from "script/Deploy.s.sol";
 
 // NOTE: `DEPLOYMENT_SALT` is derived using `Witness` contract initcode hash.
 //       keccak256(abi.encodePacked(type(c).creationCode, abi.encode(params)))
-address constant EXPECTED_ADDR = address(0x0000000E89DBAFBDDe5a59ABd49be9fdEbe76eE2);
+address constant EXPECTED_ADDR = address(0x000000055f6fE7A302468250bBeC227b07a0EE5c);
 
 /// @dev Modifying `Witness` contract will cause this to fail.
 //       Recalculate initcode hash and deployment salt to fix.
