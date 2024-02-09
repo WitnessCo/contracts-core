@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.0;
 
 import { IWitness, Proof } from "./interfaces/IWitness.sol";
-import { IWitnessProvenanceConsumer } from "./interfaces/IWitnessProvenanceConsumer.sol";
+import { IWitnessConsumer } from "./interfaces/IWitnessConsumer.sol";
 
-/// @title WitnessProvenanceConsumer
+/// @title WitnessConsumer
 /// @author sina.eth
 /// @notice Utility mixin for contracts that want to consume provenance.
-/// @dev See IWitnessProvenanceConsumer.sol for more information.
-abstract contract WitnessProvenanceConsumer is IWitnessProvenanceConsumer {
+/// @dev See IWitnessConsumer.sol for more information.
+abstract contract WitnessConsumer is IWitnessConsumer {
     /*//////////////////////////////////////////////////////////////////////////
                                    PUBLIC STORAGE
     //////////////////////////////////////////////////////////////////////////*/
 
     /// @notice The Witness contract that this contract uses to verify provenance.
-    /// @inheritdoc IWitnessProvenanceConsumer
+    /// @inheritdoc IWitnessConsumer
     IWitness public immutable WITNESS;
 
     /*//////////////////////////////////////////////////////////////////////////
@@ -31,18 +31,18 @@ abstract contract WitnessProvenanceConsumer is IWitnessProvenanceConsumer {
                          READ METHODS
     //////////////////////////////////////////////////////////////*/
 
-    /// @inheritdoc IWitnessProvenanceConsumer
+    /// @inheritdoc IWitnessConsumer
     function getProvenanceHash(bytes calldata data) public view virtual returns (bytes32) {
         return keccak256(data);
     }
 
-    /// @inheritdoc IWitnessProvenanceConsumer
-    function verifyProof(Proof calldata proof) public view {
+    /// @inheritdoc IWitnessConsumer
+    function verifyProof(Proof calldata proof) public view virtual {
         WITNESS.verifyProof(proof);
     }
 
-    /// @inheritdoc IWitnessProvenanceConsumer
-    function safeVerifyProof(Proof calldata proof) public view returns (bool) {
+    /// @inheritdoc IWitnessConsumer
+    function safeVerifyProof(Proof calldata proof) public view virtual returns (bool) {
         return WITNESS.safeVerifyProof(proof);
     }
 }

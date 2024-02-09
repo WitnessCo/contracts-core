@@ -1,14 +1,14 @@
-# WitnessProvenanceConsumer
+# WitnessConsumer
 
-[Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/WitnessProvenanceConsumer.sol)
+[Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/WitnessConsumer.sol)
 
-**Inherits:** IWitnessProvenanceConsumer
+**Inherits:** IWitnessConsumer
 
 **Author:** sina.eth
 
 Utility mixin for contracts that want to consume provenance.
 
-_See IWitnessProvenanceConsumer.sol for more information._
+_See IWitnessConsumer.sol for more information._
 
 ## State Variables
 

@@ -4,14 +4,14 @@ pragma solidity ^0.8.23;
 import { ERC721 } from "solady/tokens/ERC721.sol";
 
 import { IWitness, Proof } from "src/interfaces/IWitness.sol";
-import { WitnessProvenanceConsumer } from "src/WitnessProvenanceConsumer.sol";
+import { WitnessConsumer } from "src/WitnessConsumer.sol";
 import { IERC721P } from "./IERC721P.sol";
 
 /// @title ERC721P
 /// @author sina.eth
 /// @notice Simple example implementation of ERC721P.
 /// @dev A simple implementation of IERC721P.
-contract ERC721P is ERC721, IERC721P, WitnessProvenanceConsumer {
+contract ERC721P is ERC721, IERC721P, WitnessConsumer {
     /*//////////////////////////////////////////////////////////////////////////
                                    PUBLIC STORAGE
     //////////////////////////////////////////////////////////////////////////*/
@@ -25,7 +25,7 @@ contract ERC721P is ERC721, IERC721P, WitnessProvenanceConsumer {
 
     /// @dev Immutably sets the Witness address.
     /// @param _witness The address that's used as the Witness to verify provenance against.
-    constructor(IWitness _witness) WitnessProvenanceConsumer(_witness) { }
+    constructor(IWitness _witness) WitnessConsumer(_witness) { }
 
     /*//////////////////////////////////////////////////////////////
                 READ METHODS - ERC721 OVERRIDES
@@ -56,7 +56,7 @@ contract ERC721P is ERC721, IERC721P, WitnessProvenanceConsumer {
 
     /// @dev Returns the hash used for the provenance of the token's data.
     ///      In this sample implementation, we simply use the keccak256 hash of the bridgeData.
-    /// @inheritdoc WitnessProvenanceConsumer
+    /// @inheritdoc WitnessConsumer
     function getProvenanceHash(bytes calldata bridgeData) public view virtual override returns (bytes32) {
         return keccak256(bridgeData);
     }

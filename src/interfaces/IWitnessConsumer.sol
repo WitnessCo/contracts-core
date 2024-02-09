@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.0;
 
 import { IWitness, Proof } from "./IWitness.sol";
 
-/// @title IWitnessProvenanceConsumer
+/// @title IWitnessConsumer
 /// @author sina.eth
 /// @notice Utility mixin for contracts that want to consume provenance.
 /// @dev See the core Witness.sol contract for more information.
-interface IWitnessProvenanceConsumer {
+interface IWitnessConsumer {
     /*//////////////////////////////////////////////////////////////////////////
                                    PUBLIC STORAGE
     //////////////////////////////////////////////////////////////////////////*/

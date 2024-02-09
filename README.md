@@ -26,9 +26,9 @@ repo
 ├── src
 │   ├── interfaces
 │   │   └── Interfaces for the core contracts
-│   ├── MockWitnessProvenanceConsumer.sol
+│   ├── MockWitnessConsumer.sol
 │   ├── Witness.sol
-│   ├── WitnessProvenanceConsumer.sol
+│   ├── WitnessConsumer.sol
 │   └── WitnessUtils.sol
 ├── test
 │   └── Solidity tests for the core contracts
@@ -66,7 +66,7 @@ The contracts in this repo also depend on [Solady](https://github.com/Vectorized
 
 ## Usage
 
-Witness's core contracts can be permissionlessly integrated with by other systems on or offchain. Offchain systems can leverage these contracts as a source of truth for verification, while onchain consumers can inherit from the `WitnessProvenanceConsumer` contract for a more seamless integration.
+Witness's core contracts can be permissionlessly integrated with by other systems on or offchain. Offchain systems can leverage these contracts as a source of truth for verification, while onchain consumers can inherit from the `WitnessConsumer` contract for a more seamless integration.
 
 See the [examples](./examples) directory for some sample usages of the core contracts.
 

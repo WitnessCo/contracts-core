@@ -2,7 +2,7 @@
 
 [Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/IERC721P.sol)
 
-**Inherits:** WitnessProvenanceConsumer
+**Inherits:** WitnessConsumer
 
 **Author:** sina.eth
 
@@ -17,7 +17,7 @@ _ERC721-P[rovenance] is a 721 token that supports "bridging" provenance of lazy 
 _Immutably sets the Witness address._
 
 ```solidity
-constructor(IWitness _witness) WitnessProvenanceConsumer(_witness);
+constructor(IWitness _witness) WitnessConsumer(_witness);
 ```
 
 **Parameters**

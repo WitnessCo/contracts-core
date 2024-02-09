@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.0;
 
 /*//////////////////////////////////////////////////////////////
                         CUSTOM ERRORS
@@ -32,6 +32,14 @@ struct Proof {
     bytes32 targetRoot;
 }
 
+/// @title RootInfo
+/// @notice A packed 32 byte value containing info for any given root.
+struct RootInfo {
+    uint176 treeSize;
+    uint48 timestamp;
+    uint32 height;
+}
+
 /// @title IWitness
 /// @author sina.eth
 /// @notice Interface for the core Witness smart contract.
@@ -50,17 +58,22 @@ interface IWitness {
                                    PUBLIC STORAGE
     //////////////////////////////////////////////////////////////////////////*/
 
-    /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
-    /// @dev This mapping is used to keep track of the tree size corresponding to when the contract accepted a given
-    /// root hash.
-    /// @dev Returns 0 if the root hash is not in the mapping.
-    /// @notice param root The root hash for the checkpoint.
-    /// @notice return treeSize The tree size corresponding to the root.
-    function rootCache(bytes32 root) external view returns (uint256);
-
     /// @notice The current root hash.
     /// @dev This is the root hash of the most recently accepted update.
     function currentRoot() external view returns (bytes32);
+
+    /// @notice A Mapping of checkpointed root hashes to their corresponding tree data.
+    /// @param root The root hash for the checkpoint.
+    /// @return info The `RootInfo` struct containing info about the root hash checkpoint.
+    function rootInfo(bytes32 root) external view returns (RootInfo memory);
+
+    /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
+    /// @dev This mapping is used to keep track of the tree size corresponding to when
+    /// the contract accepted a given root hash.
+    /// @dev Returns 0 if the root hash is not in the mapping.
+    /// @param root The root hash for the checkpoint.
+    /// @return treeSize The tree size corresponding to the root.
+    function rootCache(bytes32 root) external view returns (uint256);
 
     /*//////////////////////////////////////////////////////////////
                          READ METHODS
@@ -71,6 +84,16 @@ interface IWitness {
     /// @return currentRoot The current root of the tree.
     /// @return treeSize The current size of the tree.
     function getCurrentTreeState() external view returns (bytes32, uint256);
+
+    /// @notice Helper util to get the last `block.timestamp` the tree was updated.
+    ///
+    /// @return timestamp The `block.timestamp` the update was made.
+    function getLastUpdateTime() external view returns (uint256);
+
+    /// @notice Helper util to get the last `block.number` the tree was updated.
+    ///
+    /// @return block The `block.timestamp` the update was made.
+    function getLastUpdateBlock() external view returns (uint256);
 
     /// @notice Verifies a proof for a given leaf. Throws an error if the proof is invalid.
     ///

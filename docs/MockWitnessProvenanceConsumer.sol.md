@@ -1,6 +1,6 @@
 # InvalidProof
 
-[Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/MockWitnessProvenanceConsumer.sol)
+[Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/MockWitnessConsumer.sol)
 
 General error for invalid proof.
 
@@ -8,17 +8,17 @@ General error for invalid proof.
 error InvalidProof();
 ```
 
-# MockWitnessProvenanceConsumer
+# MockWitnessConsumer
 
-[Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/MockWitnessProvenanceConsumer.sol)
+[Git Source](https://github.com/WitnessCo/contracts-core/blob/af068ccc3b87576f36c3315270a9f29603465e11/src/MockWitnessConsumer.sol)
 
-**Inherits:** IWitnessProvenanceConsumer
+**Inherits:** IWitnessConsumer
 
 **Author:** sina.eth
 
 Test and prototyping utility for contracts that want to consume provenance.
 
-_See IWitnessProvenanceConsumer.sol for more information._
+_See IWitnessConsumer.sol for more information._
 
 ## State Variables
 

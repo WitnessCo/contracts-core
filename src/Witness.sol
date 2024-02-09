@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.0;
 
 import { LibBit } from "solady/utils/LibBit.sol";
+import { SafeCastLib } from "solady/utils/SafeCastLib.sol";
 import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
 
 import {
@@ -15,7 +16,8 @@ import {
     InvalidUpdateOldRangeMismatchWrongLength,
     InvalidUpdateTreeSizeMustGrow,
     IWitness,
-    Proof
+    Proof,
+    RootInfo
 } from "./interfaces/IWitness.sol";
 import { getRangeSizeForNonZeroBeginningInterval, getRoot, getRootForMergedRange, merge } from "./WitnessUtils.sol";
 
@@ -25,24 +27,33 @@ import { getRangeSizeForNonZeroBeginningInterval, getRoot, getRootForMergedRange
 /// @dev The Witness smart contract tracks a merkle mountain range and enforces
 ///      that any newly posted merkle root is consistent with the previous root.
 contract Witness is IWitness, OwnableRoles {
+    using SafeCastLib for uint256;
     using LibBit for uint256;
 
     /*//////////////////////////////////////////////////////////////////////////
                                    CONSTANTS
     //////////////////////////////////////////////////////////////////////////*/
+
     uint256 public constant UPDATER_ROLE = _ROLE_0;
 
     /*//////////////////////////////////////////////////////////////////////////
-                                   PUBLIC STORAGE
+                                MUTABLE STORAGE
     //////////////////////////////////////////////////////////////////////////*/
 
-    /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
-    /// @inheritdoc IWitness
-    mapping(bytes32 rootHash => uint256 treeSize) public rootCache;
-
-    /// @notice The current root hash.
     /// @inheritdoc IWitness
     bytes32 public currentRoot;
+
+    mapping(bytes32 root => RootInfo cache) internal _rootInfo;
+
+    /// @inheritdoc IWitness
+    function rootInfo(bytes32 root) public view virtual returns (RootInfo memory) {
+        return _rootInfo[root];
+    }
+
+    /// @inheritdoc IWitness
+    function rootCache(bytes32 root) public view virtual returns (uint256) {
+        return _rootInfo[root].treeSize;
+    }
 
     /*//////////////////////////////////////////////////////////////////////////
                                      CONSTRUCTOR
@@ -60,13 +71,24 @@ contract Witness is IWitness, OwnableRoles {
     //////////////////////////////////////////////////////////////*/
 
     /// @inheritdoc IWitness
-    function getCurrentTreeState() external view returns (bytes32, uint256) {
-        return (currentRoot, rootCache[currentRoot]);
+    function getCurrentTreeState() external view virtual returns (bytes32, uint256) {
+        bytes32 _currentRoot = currentRoot;
+        return (_currentRoot, _rootInfo[_currentRoot].treeSize);
     }
 
     /// @inheritdoc IWitness
-    function verifyProof(Proof calldata proof) external view {
-        uint256 targetTreeSize = rootCache[proof.targetRoot];
+    function getLastUpdateTime() external view virtual returns (uint256) {
+        return _rootInfo[currentRoot].timestamp;
+    }
+
+    /// @inheritdoc IWitness
+    function getLastUpdateBlock() external view virtual returns (uint256) {
+        return _rootInfo[currentRoot].height;
+    }
+
+    /// @inheritdoc IWitness
+    function verifyProof(Proof calldata proof) external view virtual {
+        uint256 targetTreeSize = _rootInfo[proof.targetRoot].treeSize;
         if (proof.index >= targetTreeSize) {
             // Provided index is out of bounds.
             revert InvalidProofLeafIdxOutOfBounds();
@@ -120,6 +142,7 @@ contract Witness is IWitness, OwnableRoles {
         bytes32[] calldata newRange
     )
         external
+        virtual
         onlyRoles(UPDATER_ROLE)
     {
         bytes32 _currentRoot = currentRoot;
@@ -138,7 +161,7 @@ contract Witness is IWitness, OwnableRoles {
             // Update the tree state.
             bytes32 root = getRoot(newRange);
             currentRoot = root;
-            rootCache[root] = newSize;
+            _rootInfo[root] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
             emit RootUpdated(root, newSize);
             return;
         }
@@ -148,7 +171,7 @@ contract Witness is IWitness, OwnableRoles {
             // Provided old range does not match current root.
             revert InvalidUpdateOldRangeMismatchWrongCurrentRoot();
         }
-        uint256 currentSize = rootCache[_currentRoot];
+        uint256 currentSize = _rootInfo[_currentRoot].treeSize;
         // Verify size of oldRange corresponds to the size of the old root.
         if (currentSize.popCount() != oldRange.length) {
             // Provided old range does not match current tree size.
@@ -183,7 +206,7 @@ contract Witness is IWitness, OwnableRoles {
 
         // ---HANDLE UPDATE PT 2. UPDATE STATE & EMIT EVENTS---
         currentRoot = newRoot;
-        rootCache[newRoot] = newSize;
+        _rootInfo[newRoot] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
         emit RootUpdated(newRoot, newSize);
     }
 }

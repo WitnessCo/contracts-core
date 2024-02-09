@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.23;
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.18;
 
 import { PRBTest } from "@prb/test/src/PRBTest.sol";
 import { StdUtils } from "forge-std/src/StdUtils.sol";
@@ -21,7 +21,8 @@ contract WitnessTest is PRBTest, StdUtils {
     }
 
     function testEmptyToSizeOne() public {
-        assertEq(c.rootCache(c.currentRoot()), 0);
+        uint256 _size = c.rootCache(c.currentRoot());
+        assertEq(_size, 0);
         newRange = new bytes32[](1);
         newRange[0] = bytes32(uint256(1));
         c.updateTreeRoot(1, new bytes32[](0), newRange);
@@ -31,7 +32,8 @@ contract WitnessTest is PRBTest, StdUtils {
     }
 
     function testEmptyToSizeTwo() public {
-        assertEq(c.rootCache(c.currentRoot()), 0);
+        uint256 _size = c.rootCache(c.currentRoot());
+        assertEq(_size, 0);
         bytes32[] memory rangeOne = new bytes32[](1);
         rangeOne[0] = bytes32(uint256(1));
         c.updateTreeRoot(1, new bytes32[](0), rangeOne);
