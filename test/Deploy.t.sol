@@ -15,9 +15,7 @@ address constant EXPECTED_ADDR = address(0x0000000E89DBAFBDDe5a59ABd49be9fdEbe76
 contract DeployTest is PRBTest, StdUtils {
     event log(bytes32);
 
-    function testRunCorrectness() 
-        public 
-    {
+    function testRunCorrectness() public {
         uint256 deployerKey = vm.envUint("DEPLOYMENT_PRIVATE_KEY");
         address deployer = vm.addr(deployerKey);
         emit log(keccak256(abi.encodePacked(type(Witness).creationCode, abi.encode(deployer))));

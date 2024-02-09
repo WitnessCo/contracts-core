@@ -11,6 +11,6 @@ contract Deploy is BaseScript {
         bytes32 salt = vm.envBytes32("DEPLOYMENT_SALT");
         address deployer = vm.addr(deployerKey);
         vm.broadcast();
-        witness =  new Witness{ salt: salt }(deployer);
+        witness = new Witness{ salt: salt }(deployer);
     }
 }

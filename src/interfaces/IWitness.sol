@@ -67,8 +67,8 @@ interface IWitness {
 
     /// @notice A array containing every checkpointed root hash.
     /// @param nonce The number of total updates at the root you want to find.
-    /// @return rootHash The root hash for the given update nonce. 
-    function roots(uint256 nonce) public view returns (bytes32);
+    /// @return rootHash The root hash for the given update nonce.
+    function roots(uint256 nonce) external view returns (bytes32);
 
     /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
     /// @dev This mapping is used to keep track of the tree size corresponding to when
