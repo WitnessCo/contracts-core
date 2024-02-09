@@ -32,9 +32,9 @@ struct Proof {
     bytes32 targetRoot;
 }
 
-/// @title RootCache
+/// @title RootInfo
 /// @notice A packed 32 byte value containing info for any given root.
-struct RootCache {
+struct RootInfo {
     uint176 treeSize;
     uint48 timestamp;
     uint32 height;
@@ -61,24 +61,22 @@ interface IWitness {
     /// @notice The total amount of roots that have been checkpointed.
     function totalRoots() external view returns (uint256);
 
-    /// @notice The current root hash.
-    /// @dev This is the root hash of the most recently accepted update.
-    function currentRoot() external view returns (bytes32);
-
     /// @notice A array containing every checkpointed root hash.
     /// @param nonce The number of total updates at the root you want to find.
     /// @return rootHash The root hash for the given update nonce.
     function roots(uint256 nonce) external view returns (bytes32);
+
+    /// @notice The current root hash.
+    /// @dev This is the root hash of the most recently accepted update.
+    function currentRoot() external view returns (bytes32);
 
     /// @notice A mapping of checkpointed root hashes to their corresponding tree sizes.
     /// @dev This mapping is used to keep track of the tree size corresponding to when
     /// the contract accepted a given root hash.
     /// @dev Returns 0 if the root hash is not in the mapping.
     /// @param root The root hash for the checkpoint.
-    /// @return return treeSize The tree size corresponding to the root.
-    /// @return timestamp The `block.timestamp` the update was made.
-    /// @return block The `block.timestamp` the update was made.
-    function rootCache(bytes32 root) external view returns (uint256, uint256, uint256);
+    /// @return treeSize The tree size corresponding to the root.
+    function rootCache(bytes32 root) external view returns (uint256);
 
     /*//////////////////////////////////////////////////////////////
                          READ METHODS
@@ -88,14 +86,7 @@ interface IWitness {
     ///
     /// @return currentRoot The current root of the tree.
     /// @return treeSize The current size of the tree.
-    /// @return timestamp The `block.timestamp` the update was made.
-    /// @return block The `block.timestamp` the update was made.
-    function getCurrentTreeState() external view returns (bytes32, uint256, uint256, uint256);
-
-    /// @notice Helper util to get the current tree size.
-    ///
-    /// @return treeSize The current size of the tree.
-    function getCurrentTreeSize() external view returns (uint256);
+    function getCurrentTreeState() external view returns (bytes32, uint256);
 
     /// @notice Helper util to get the last `block.timestamp` the tree was updated.
     ///
