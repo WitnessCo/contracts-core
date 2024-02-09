@@ -50,14 +50,14 @@ contract Witness is IWitness, OwnableRoles {
     mapping(bytes32 rootHash => RootInfo cache) public rootInfo;
 
     /// @inheritdoc IWitness
-    function currentRoot() public view returns (bytes32) {
+    function currentRoot() public view virtual returns (bytes32) {
         unchecked {
             return roots[totalRoots - 1];
         }
     }
 
     /// @inheritdoc IWitness
-    function rootCache(bytes32 root) public view returns (uint256) {
+    function rootCache(bytes32 root) public view virtual returns (uint256) {
         return rootInfo[root].treeSize;
     }
 
@@ -77,23 +77,23 @@ contract Witness is IWitness, OwnableRoles {
     //////////////////////////////////////////////////////////////*/
 
     /// @inheritdoc IWitness
-    function getCurrentTreeState() external view returns (bytes32, uint256) {
+    function getCurrentTreeState() external view virtual returns (bytes32, uint256) {
         bytes32 _currentRoot = currentRoot();
         return (_currentRoot, rootInfo[_currentRoot].treeSize);
     }
 
     /// @inheritdoc IWitness
-    function getLastUpdateTime() external view returns (uint256) {
+    function getLastUpdateTime() external view virtual returns (uint256) {
         return rootInfo[currentRoot()].timestamp;
     }
 
     /// @inheritdoc IWitness
-    function getLastUpdateBlock() external view returns (uint256) {
+    function getLastUpdateBlock() external view virtual returns (uint256) {
         return rootInfo[currentRoot()].height;
     }
 
     /// @inheritdoc IWitness
-    function verifyProof(Proof calldata proof) external view {
+    function verifyProof(Proof calldata proof) external view virtual {
         uint256 targetTreeSize = rootInfo[proof.targetRoot].treeSize;
         if (proof.index >= targetTreeSize) {
             // Provided index is out of bounds.
@@ -148,6 +148,7 @@ contract Witness is IWitness, OwnableRoles {
         bytes32[] calldata newRange
     )
         external
+        virtual
         onlyRoles(UPDATER_ROLE)
     {
         bytes32 _currentRoot = currentRoot();

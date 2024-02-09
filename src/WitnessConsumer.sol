@@ -37,12 +37,12 @@ abstract contract WitnessConsumer is IWitnessConsumer {
     }
 
     /// @inheritdoc IWitnessConsumer
-    function verifyProof(Proof calldata proof) public view {
+    function verifyProof(Proof calldata proof) public view virtual {
         WITNESS.verifyProof(proof);
     }
 
     /// @inheritdoc IWitnessConsumer
-    function safeVerifyProof(Proof calldata proof) public view returns (bool) {
+    function safeVerifyProof(Proof calldata proof) public view virtual returns (bool) {
         return WITNESS.safeVerifyProof(proof);
     }
 }
