@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.18;
+pragma solidity ^0.8.0;
 
 import { IWitness, Proof } from "./interfaces/IWitness.sol";
 import { IWitnessConsumer } from "./interfaces/IWitnessConsumer.sol";
