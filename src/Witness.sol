@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import { LibZip } from "solady/utils/LibZip.sol";
 import { LibBit } from "solady/utils/LibBit.sol";
 import { SafeCastLib } from "solady/utils/SafeCastLib.sol";
 import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
@@ -196,5 +197,15 @@ contract Witness is IWitness, OwnableRoles {
         currentRoot = newRoot;
         _rootInfo[newRoot] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
         emit RootUpdated(newRoot, newSize);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        L2 CALLDATA OPTIMIZATION
+    //////////////////////////////////////////////////////////////*/
+
+    /// @dev For efficiency, this function will directly return the results, terminating
+    ///      the context. If called internally, it must be called at the end of the function.
+    fallback() external virtual {
+        LibZip.cdFallback();
     }
 }
