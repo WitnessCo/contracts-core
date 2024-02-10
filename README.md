@@ -101,6 +101,10 @@ forge coverage
 
 # Coverage report
 bun test:coverage:report
+
+# Compute the CREATE2 initcode hash for a `Witness` contract.
+export OWNER_ADDRESS=OWNER_ADDRESS_HERE
+bun run initcodehash
 ```
 
 ## Built with

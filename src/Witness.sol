@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import { LibZip } from "solady/utils/LibZip.sol";
 import { LibBit } from "solady/utils/LibBit.sol";
 import { SafeCastLib } from "solady/utils/SafeCastLib.sol";
 import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
@@ -19,7 +20,14 @@ import {
     Proof,
     RootInfo
 } from "./interfaces/IWitness.sol";
-import { getRangeSizeForNonZeroBeginningInterval, getRoot, getRootForMergedRange, merge } from "./WitnessUtils.sol";
+import {
+    getRangeSizeForNonZeroBeginningInterval,
+    getRoot,
+    getRootForMergedRange,
+    merge,
+    getProofError,
+    ProofErrors
+} from "./WitnessUtils.sol";
 
 /// @title Witness
 /// @author sina.eth
@@ -88,47 +96,28 @@ contract Witness is IWitness, OwnableRoles {
 
     /// @inheritdoc IWitness
     function verifyProof(Proof calldata proof) external view virtual {
-        uint256 targetTreeSize = _rootInfo[proof.targetRoot].treeSize;
-        if (proof.index >= targetTreeSize) {
-            // Provided index is out of bounds.
+        ProofErrors e = getProofError(proof, _rootInfo[proof.targetRoot].treeSize);
+
+        if (e == ProofErrors.InvalidProofLeafIdxOutOfBounds) {
             revert InvalidProofLeafIdxOutOfBounds();
         }
-        // leftRange covers the interval [0, index);
-        // rightRange covers the interval [index + 1, targetTreeSize).
-        // Verify the size of the ranges correspond to the right intervals.
-        if (proof.index.popCount() != proof.leftRange.length) {
-            // Provided left range does not match expected size.
+
+        if (e == ProofErrors.InvalidProofBadLeftRange) {
             revert InvalidProofBadLeftRange();
         }
-        if (getRangeSizeForNonZeroBeginningInterval(proof.index + 1, targetTreeSize) != proof.rightRange.length) {
-            // Provided right range does not match expected size.
+
+        if (e == ProofErrors.InvalidProofBadRightRange) {
             revert InvalidProofBadRightRange();
         }
-        // First merge the leaf into the left and right ranges.
-        (bytes32[] calldata mergedLeft, bytes32 seed, bytes32[] calldata mergedRight) = merge(
-            proof.leftRange,
-            proof.leaf,
-            /**
-             * seedHeight=
-             */
-            0,
-            proof.index,
-            proof.rightRange,
-            targetTreeSize
-        );
-        if (getRootForMergedRange(mergedLeft, seed, mergedRight) != proof.targetRoot) {
-            // Root mismatch.
+
+        if (e == ProofErrors.InvalidProofUnrecognizedRoot) {
             revert InvalidProofUnrecognizedRoot();
         }
     }
 
     /// @inheritdoc IWitness
     function safeVerifyProof(Proof calldata proof) external view returns (bool isValid) {
-        try this.verifyProof(proof) {
-            isValid = true;
-        } catch {
-            return false;
-        }
+        return getProofError(proof, _rootInfo[proof.targetRoot].treeSize) == ProofErrors.NONE;
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -208,5 +197,15 @@ contract Witness is IWitness, OwnableRoles {
         currentRoot = newRoot;
         _rootInfo[newRoot] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
         emit RootUpdated(newRoot, newSize);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        L2 CALLDATA OPTIMIZATION
+    //////////////////////////////////////////////////////////////*/
+
+    /// @dev For efficiency, this function will directly return the results, terminating
+    ///      the context. If called internally, it must be called at the end of the function.
+    fallback() external virtual {
+        LibZip.cdFallback();
     }
 }

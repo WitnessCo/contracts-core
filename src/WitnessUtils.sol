@@ -3,6 +3,51 @@ pragma solidity ^0.8.0;
 
 import { LibBit } from "solady/utils/LibBit.sol";
 
+import { Proof } from "./interfaces/IWitness.sol";
+
+enum ProofErrors {
+    NONE,
+    InvalidProofLeafIdxOutOfBounds,
+    InvalidProofBadLeftRange,
+    InvalidProofBadRightRange,
+    InvalidProofUnrecognizedRoot
+}
+
+function getProofError(Proof calldata proof, uint256 targetTreeSize) pure returns (ProofErrors) {
+    if (proof.index >= targetTreeSize) {
+        // Provided index is out of bounds.
+        return ProofErrors.InvalidProofLeafIdxOutOfBounds;
+    }
+    // leftRange covers the interval [0, index);
+    // rightRange covers the interval [index + 1, targetTreeSize).
+    // Verify the size of the ranges correspond to the right intervals.
+    if (LibBit.popCount(proof.index) != proof.leftRange.length) {
+        // Provided left range does not match expected size.
+        return ProofErrors.InvalidProofBadLeftRange;
+    }
+    if (getRangeSizeForNonZeroBeginningInterval(proof.index + 1, targetTreeSize) != proof.rightRange.length) {
+        // Provided right range does not match expected size.
+        return ProofErrors.InvalidProofBadRightRange;
+    }
+    // First merge the leaf into the left and right ranges.
+    (bytes32[] calldata mergedLeft, bytes32 seed, bytes32[] calldata mergedRight) = merge(
+        proof.leftRange,
+        proof.leaf,
+        /**
+         * seedHeight=
+         */
+        0,
+        proof.index,
+        proof.rightRange,
+        targetTreeSize
+    );
+    if (getRootForMergedRange(mergedLeft, seed, mergedRight) != proof.targetRoot) {
+        // Root mismatch.
+        return ProofErrors.InvalidProofUnrecognizedRoot;
+    }
+    return ProofErrors.NONE;
+}
+
 /// @notice Helper for calculating range size for a non-zero-starting interval.
 /// @dev The bitmath here decomposes the interval into two parts that in
 ///      combination represent the compact range needed to express the interval.
