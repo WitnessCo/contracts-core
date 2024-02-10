@@ -103,10 +103,8 @@ forge coverage
 bun test:coverage:report
 
 # Compute the CREATE2 initcode hash for a `Witness` contract.
-bytecode=$(forge inspect --silent Witness bytecode)
-encodedArgs=$(cast abi-encode "abi.encode(address)" "<OWNER_ADDRESS>")
-packed=$(cast concat-hex "$bytecode" "$encodedArgs")
-cast keccak $packed 
+export OWNER_ADDRESS=OWNER_ADDRESS_HERE
+bun run initcodehash
 ```
 
 ## Built with

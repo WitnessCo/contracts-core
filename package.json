@@ -38,6 +38,7 @@
     "test": "forge test",
     "ctest": "clear && forge test",
     "test:coverage": "forge coverage",
-    "test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage"
+    "test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage",
+    "initcodehash": "cast keccak $(cast concat-hex \"$(forge inspect --silent Witness bytecode)\" \"$(cast abi-encode 'abi.encode(address)' \"$OWNER_ADDRESS\")\")"
   }
 }
