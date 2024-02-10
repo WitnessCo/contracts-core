@@ -9,6 +9,7 @@ error InvalidMockProof();
 
 /// @title MockWitnessConsumer
 /// @author sina.eth
+/// @custom:coauthor runtheblocks.eth
 /// @notice Test and prototyping utility for contracts that want to consume provenance.
 /// @dev See IWitnessConsumer.sol for more information.
 abstract contract MockWitnessConsumer is IWitnessConsumer {

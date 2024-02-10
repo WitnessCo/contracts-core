@@ -9,6 +9,7 @@ import { IERC721P } from "./IERC721P.sol";
 
 /// @title ERC721P
 /// @author sina.eth
+/// @custom:coauthor runtheblocks.eth
 /// @notice Simple example implementation of ERC721P.
 /// @dev A simple implementation of IERC721P.
 contract ERC721P is ERC721, IERC721P, WitnessConsumer {

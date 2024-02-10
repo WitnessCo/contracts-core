@@ -3,6 +3,7 @@ pragma solidity ^0.8.23;
 
 /// @title IERC721P
 /// @author sina.eth
+/// @custom:coauthor runtheblocks.eth
 /// @notice Utility mixin for ERC721 adding provenance-related utility methods.
 /// @dev ERC721-P[rovenance] is a 721 token that supports "bridging" in provenance of lazy mints via Witness.
 abstract contract IERC721P {

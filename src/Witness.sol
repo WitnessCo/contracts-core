@@ -31,6 +31,7 @@ import {
 
 /// @title Witness
 /// @author sina.eth
+/// @custom:coauthor runtheblocks.eth
 /// @notice The core Witness smart contract.
 /// @dev The Witness smart contract tracks a merkle mountain range and enforces
 ///      that any newly posted merkle root is consistent with the previous root.
