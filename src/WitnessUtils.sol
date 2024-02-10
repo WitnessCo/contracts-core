@@ -5,7 +5,7 @@ import { LibBit } from "solady/utils/LibBit.sol";
 
 import { Proof } from "./interfaces/IWitness.sol";
 
-enum ProofErrors {
+enum ProofError {
     NONE,
     InvalidProofLeafIdxOutOfBounds,
     InvalidProofBadLeftRange,
@@ -13,21 +13,21 @@ enum ProofErrors {
     InvalidProofUnrecognizedRoot
 }
 
-function getProofError(Proof calldata proof, uint256 targetTreeSize) pure returns (ProofErrors) {
+function validateProof(Proof calldata proof, uint256 targetTreeSize) pure returns (ProofError) {
     if (proof.index >= targetTreeSize) {
         // Provided index is out of bounds.
-        return ProofErrors.InvalidProofLeafIdxOutOfBounds;
+        return ProofError.InvalidProofLeafIdxOutOfBounds;
     }
     // leftRange covers the interval [0, index);
     // rightRange covers the interval [index + 1, targetTreeSize).
     // Verify the size of the ranges correspond to the right intervals.
     if (LibBit.popCount(proof.index) != proof.leftRange.length) {
         // Provided left range does not match expected size.
-        return ProofErrors.InvalidProofBadLeftRange;
+        return ProofError.InvalidProofBadLeftRange;
     }
     if (getRangeSizeForNonZeroBeginningInterval(proof.index + 1, targetTreeSize) != proof.rightRange.length) {
         // Provided right range does not match expected size.
-        return ProofErrors.InvalidProofBadRightRange;
+        return ProofError.InvalidProofBadRightRange;
     }
     // First merge the leaf into the left and right ranges.
     (bytes32[] calldata mergedLeft, bytes32 seed, bytes32[] calldata mergedRight) = merge(
@@ -43,9 +43,9 @@ function getProofError(Proof calldata proof, uint256 targetTreeSize) pure return
     );
     if (getRootForMergedRange(mergedLeft, seed, mergedRight) != proof.targetRoot) {
         // Root mismatch.
-        return ProofErrors.InvalidProofUnrecognizedRoot;
+        return ProofError.InvalidProofUnrecognizedRoot;
     }
-    return ProofErrors.NONE;
+    return ProofError.NONE;
 }
 
 /// @notice Helper for calculating range size for a non-zero-starting interval.
