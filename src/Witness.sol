@@ -97,6 +97,9 @@ contract Witness is IWitness, OwnableRoles {
     /// @inheritdoc IWitness
     function verifyProof(Proof calldata proof) external view virtual {
         ProofError e = validateProof(proof, _rootInfo[proof.targetRoot].treeSize);
+        if (e == ProofError.NONE) {
+            return;
+        }
 
         if (e == ProofError.InvalidProofLeafIdxOutOfBounds) {
             revert InvalidProofLeafIdxOutOfBounds();
