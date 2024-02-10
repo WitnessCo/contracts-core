@@ -35,8 +35,11 @@ struct Proof {
 /// @title RootInfo
 /// @notice A packed 32 byte value containing info for any given root.
 struct RootInfo {
+    // Max value = 2**176 - 1 = ~9.5e52
     uint176 treeSize;
+    // Max value = 2**48 - 1 = ~2.8e14 = 281474976710655 = overflows unix time calculator
     uint48 timestamp;
+    // Max value = 2**32 - 1 = ~4.2e9 = ~1000-timelengths of current arbitrum
     uint32 height;
 }
 

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import { LibZip } from "solady/utils/LibZip.sol";
-import { LibBit } from "solady/utils/LibBit.sol";
-import { SafeCastLib } from "solady/utils/SafeCastLib.sol";
 import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
+import { LibBit } from "solady/utils/LibBit.sol";
+import { LibZip } from "solady/utils/LibZip.sol";
+import { SafeCastLib } from "solady/utils/SafeCastLib.sol";
 
 import {
     InvalidProofBadLeftRange,
@@ -25,8 +25,8 @@ import {
     getRoot,
     getRootForMergedRange,
     merge,
-    getProofError,
-    ProofErrors
+    ProofError,
+    validateProof
 } from "./WitnessUtils.sol";
 
 /// @title Witness
@@ -96,28 +96,28 @@ contract Witness is IWitness, OwnableRoles {
 
     /// @inheritdoc IWitness
     function verifyProof(Proof calldata proof) external view virtual {
-        ProofErrors e = getProofError(proof, _rootInfo[proof.targetRoot].treeSize);
+        ProofError e = validateProof(proof, _rootInfo[proof.targetRoot].treeSize);
 
-        if (e == ProofErrors.InvalidProofLeafIdxOutOfBounds) {
+        if (e == ProofError.InvalidProofLeafIdxOutOfBounds) {
             revert InvalidProofLeafIdxOutOfBounds();
         }
 
-        if (e == ProofErrors.InvalidProofBadLeftRange) {
+        if (e == ProofError.InvalidProofBadLeftRange) {
             revert InvalidProofBadLeftRange();
         }
 
-        if (e == ProofErrors.InvalidProofBadRightRange) {
+        if (e == ProofError.InvalidProofBadRightRange) {
             revert InvalidProofBadRightRange();
         }
 
-        if (e == ProofErrors.InvalidProofUnrecognizedRoot) {
+        if (e == ProofError.InvalidProofUnrecognizedRoot) {
             revert InvalidProofUnrecognizedRoot();
         }
     }
 
     /// @inheritdoc IWitness
     function safeVerifyProof(Proof calldata proof) external view returns (bool isValid) {
-        return getProofError(proof, _rootInfo[proof.targetRoot].treeSize) == ProofErrors.NONE;
+        return validateProof(proof, _rootInfo[proof.targetRoot].treeSize) == ProofError.NONE;
     }
 
     /*//////////////////////////////////////////////////////////////
