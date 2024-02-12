@@ -39,7 +39,7 @@ struct RootInfo {
     uint176 treeSize;
     // Max value = 2**40 - 1 = ~1.1e12 = 1099511627775 seconds = tens-of-thousands of years into the future
     uint40 timestamp;
-    // Max value = 2**40 - 1 = ~1.1e12 = 1099511627775 = ~3 thousand years' worth of sub-second blocks into the future
+    // Max value = 2**40 - 1 = ~1.1e12 = 1099511627775 = thousands of years' worth of sub-second blocks into the future
     uint40 height;
 }
 
