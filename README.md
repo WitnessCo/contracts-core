@@ -107,6 +107,78 @@ export OWNER_ADDRESS=OWNER_ADDRESS_HERE
 bun run initcodehash
 ```
 
+## Deployments
+
+If you need a deployment on a new chain, feel free to open an issue and we can help you. Additional information is provided below for reference as well.
+
+### Existing deployments
+
+| Chain ID                    | Deployment Address |
+| --------------------------- | ------------------ |
+| Mainnet (1)                 | 0xTODO             |
+| Base (8453)                 | 0xTODO             |
+| Optimism (10)               | 0xTODO             |
+| Sepolia (11155111)          | 0xTODO             |
+| Base Sepolia (84532)        | 0x                 |
+| Optimism Sepolia (11155420) | 0x                 |
+
+### Deploying on a new EVM chain
+
+Deployment on a new chain involves a few steps:
+
+1. Deploy a Gnosis Safe to be the `owner` param of the deployment (see below for guidance)
+2. Calculate the CREATE2 initcode hash for the `Witness` contract via the following:
+```sh
+export OWNER_ADDRESS=<OWNER_ADDRESS_HERE> bun run initcodehash
+```
+3. Run `Deploy.s.sol` with the `owner` constructor param, the create2 factory, and the salt set:
+```sh
+forge run TODO
+```
+4. Note down the resulting values into this README:
+    - Any Gnosis Safe that needed to be deployed, along with any new signers
+    - Salt used for deployment
+    - Deployed address for `Witness.sol`
+5. Add any additional `UPDATER_ROLE` addresses via the `grantRoles` method, called via the owner
+6. Set up your checkpointer to submit updates to the new chain's `Witness.sol` address
+7. You're all set!
+
+Note that because we're using a Create2 factory, the EOA you deploy from shouldn't affect the resulting address.
+
+### Reference Values
+
+#### Create2 Factory and Salt
+
+`0xTODO`
+
+#### Owner Gnosis Safe Signers
+
+- `0x9668aCbF23F0c4BC87B6D843EeEE35C20B91f643`
+- `0x4f31617dc6f154cffba81eb5b9b307b442b3e661`
+- `0x42EE0F3D7E54b6feF329fB6dc860634794832D2F`
+- `0x3e8a785b44d28a9522d16e29158bea1c06d3a762`
+- `0x2e6511E702a256b92Be25580803f93269a1b8E45`
+- `0x72Ff26D9517324eEFA89A48B75c5df41132c4f54`
+
+#### Owner Gnosis Safe Deployments
+
+`Witness.sol`'s sole parameter is an owner address, which is set to a Gnosis Safe.
+
+[Smold.app's MultiSafe](https://smold.app/safe) helps us get deterministic Safe addresses for supported chains. The supported chains are as follows:
+- Mainnet (1)
+- Base (8453)
+- Optimism (10)
+
+For these chains, given our EOA signers staying fixed across chains, the address for the deployed owner Gnosis Safe is `0xTODO`.
+
+For chains that the MultiSafe tool doesn't support, we can manually deploy Gnosis Safes without having the address consistent. These are below:
+
+| Chain ID                    | Owner Safe Address                                                                                                                       |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Sepolia (11155111)          | [0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83](https://sepolia.etherscan.io/address/0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83)            |
+| Base Sepolia (84532)        | [0xf554f6e21094adb06680bd49aab99b622c68cec0](https://sepolia.basescan.org/address/0xf554f6e21094adb06680bd49aab99b622c68cec0)            |
+| Optimism Sepolia (11155420) | [0xc22834581ebc8527d974f8a1c97e1bea4ef910bc](https://optimism-sepolia.blockscout.com/address/0xc22834581ebc8527d974f8a1c97e1bea4ef910bc) |
+
 ## Built with
 - [Foundry](https://getfoundry.sh/)
 - [Bun](https://bun.sh)
