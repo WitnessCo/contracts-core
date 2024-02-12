@@ -33,7 +33,7 @@
       "to": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
       "cumulativeGasUsed": "0x171ee9",
       "gasUsed": "0x1667a8",
-      "contractAddress": "0x630f98e225829F1F632cdD206796e072a120F648",
+      "contractAddress": null,
       "logs": [
         {
           "address": "0x630f98e225829F1F632cdD206796e072a120F648",
@@ -80,7 +80,7 @@
       "value": "0x630f98e225829F1F632cdD206796e072a120F648"
     }
   },
-  "timestamp": 1707857558,
+  "timestamp": 1707857520,
   "chain": 84532,
   "multi": false,
   "commit": "76e2356"

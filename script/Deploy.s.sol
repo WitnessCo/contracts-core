@@ -9,8 +9,8 @@ contract Deploy is BaseScript {
     function run() public returns (Witness witness) {
         uint256 deployerKey = vm.envUint("DEPLOYMENT_PRIVATE_KEY");
         bytes32 salt = vm.envBytes32("DEPLOYMENT_SALT");
-        address deployer = vm.addr(deployerKey);
-        vm.broadcast();
-        witness = new Witness{ salt: salt }(deployer);
+        address owner = vm.envAddress("OWNER_ADDRESS");
+        vm.broadcast(deployerKey);
+        witness = new Witness{ salt: salt }(owner);
     }
 }

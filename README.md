@@ -1,11 +1,10 @@
-# Witness Core Contracts [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![Foundry][foundry-badge]][foundry] [![License: MIT][license-badge]][license]
+# Witness Core Contracts [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![License: MIT][license-badge]][license]
 
 [gitpod]: https://gitpod.io/#https://github.com/WitnessCo/contracts-core
 [gitpod-badge]: https://img.shields.io/badge/Gitpod-Open%20in%20Gitpod-FFB45B?logo=gitpod
 [gha]: https://github.com/WitnessCo/contracts-core/actions
 [gha-badge]: https://github.com/WitnessCo/contracts-core/actions/workflows/ci.yml/badge.svg
 [foundry]: https://getfoundry.sh/
-[foundry-badge]: https://img.shields.io/badge/Built%20with-Foundry-FFDB1C.svg
 [license]: https://opensource.org/licenses/MIT
 [license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
 
@@ -113,45 +112,48 @@ If you need a deployment on a new chain, feel free to open an issue and we can h
 
 ### Existing deployments
 
-| Chain ID                    | Deployment Address |
-| --------------------------- | ------------------ |
-| Mainnet (1)                 | 0xTODO             |
-| Base (8453)                 | 0xTODO             |
-| Optimism (10)               | 0xTODO             |
-| Sepolia (11155111)          | 0xTODO             |
-| Base Sepolia (84532)        | 0x                 |
-| Optimism Sepolia (11155420) | 0x                 |
+| Chain ID                    | Deployment Address                         |
+| --------------------------- | ------------------------------------------ |
+| Mainnet (1)                 | 0xTODO                                     |
+| Base (8453)                 | 0x                                         |
+| Optimism (10)               | 0x                                         |
+| Sepolia (11155111)          | 0x                                         |
+| Base Sepolia (84532)        | 0x630f98e225829F1F632cdD206796e072a120F648 |
+| Optimism Sepolia (11155420) | 0x                                         |
 
 ### Deploying on a new EVM chain
 
 Deployment on a new chain involves a few steps:
 
-1. Deploy a Gnosis Safe to be the `owner` param of the deployment (see below for guidance)
+1. Deploy a Gnosis Safe to be the `owner` param of the deployment (see below for guidance). Set this as the `OWNER_ADDRESS` value in your `.env` file.
 2. Calculate the CREATE2 initcode hash for the `Witness` contract via the following:
 ```sh
-export OWNER_ADDRESS=<OWNER_ADDRESS_HERE> bun run initcodehash
+bun run initcodehash
 ```
-3. Run `Deploy.s.sol` with the `owner` constructor param, the create2 factory, and the salt set:
+3. Set `DEPLOYMENT_PRIVATE_KEY`, `DEPLOYMENT_SALT`, and any of the explorer API key variables in your `.env` file
+4. Run `Deploy.s.sol` with the `owner` constructor param, the create2 factory, and the salt set:
 ```sh
-forge run TODO
+forge script Deploy \
+  --broadcast \
+  -f=<YOUR_RPC_URL> \
+  --verify \
+  --verifier=sourcify
 ```
-4. Note down the resulting values into this README:
+5. Note down the resulting values into this README:
     - Any Gnosis Safe that needed to be deployed, along with any new signers
-    - Salt used for deployment
+    - Create2 factory and salt used for deployment if modified
     - Deployed address for `Witness.sol`
-5. Add any additional `UPDATER_ROLE` addresses via the `grantRoles` method, called via the owner
-6. Set up your checkpointer to submit updates to the new chain's `Witness.sol` address
-7. You're all set!
+6. Add any additional `UPDATER_ROLE` addresses via the `grantRoles` method, called via the owner
+7. Set up your checkpointer to submit updates to the new chain's `Witness.sol` address
+8. You're all set!
 
-Note that because we're using a Create2 factory, the EOA you deploy from shouldn't affect the resulting address.
+Note that because we're using a Create2 factory, the EOA you deploy from won't affect the resulting address.
 
 ### Reference Values
 
-#### Create2 Factory and Salt
-
-`0xTODO`
-
 #### Owner Gnosis Safe Signers
+
+All safes use the following singers under a 3-of-5 threshold:
 
 - `0x9668aCbF23F0c4BC87B6D843EeEE35C20B91f643`
 - `0x4f31617dc6f154cffba81eb5b9b307b442b3e661`
@@ -162,22 +164,39 @@ Note that because we're using a Create2 factory, the EOA you deploy from shouldn
 
 #### Owner Gnosis Safe Deployments
 
-`Witness.sol`'s sole parameter is an owner address, which is set to a Gnosis Safe.
+`Witness.sol`'s sole deployment parameter is an owner address, which is recommended to be set to a Gnosis Safe.
 
 [Smold.app's MultiSafe](https://smold.app/safe) helps us get deterministic Safe addresses for supported chains. The supported chains are as follows:
 - Mainnet (1)
 - Base (8453)
 - Optimism (10)
 
-For these chains, given our EOA signers staying fixed across chains, the address for the deployed owner Gnosis Safe is `0xTODO`.
+For these chains, given our EOA signers staying fixed across chains, the address for the deployed owner Gnosis Safe is `0x10e859116a6388A7D0540a1bc1247Ae599d24F16`.
 
-For chains that the MultiSafe tool doesn't support, we can manually deploy Gnosis Safes without having the address consistent. These are below:
+For chains that the MultiSafe tool doesn't support, we can manually deploy Gnosis Safes without having the address consistent. All chains have their values listed below for reference:
 
 | Chain ID                    | Owner Safe Address                                                                                                                       |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Mainnet (1)                 | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://etherscan.io/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)                    |
+| Base (8453)                 | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://basescan.org/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)                    |
+| Optimism (10)               | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://optimistic.etherscan.io/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)         |
 | Sepolia (11155111)          | [0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83](https://sepolia.etherscan.io/address/0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83)            |
 | Base Sepolia (84532)        | [0xf554f6e21094adb06680bd49aab99b622c68cec0](https://sepolia.basescan.org/address/0xf554f6e21094adb06680bd49aab99b622c68cec0)            |
 | Optimism Sepolia (11155420) | [0xc22834581ebc8527d974f8a1c97e1bea4ef910bc](https://optimism-sepolia.blockscout.com/address/0xc22834581ebc8527d974f8a1c97e1bea4ef910bc) |
+
+#### Create2 Factory and Salt
+
+When running the deploy script above, a factory address and salt are required for the create2 style deployment. The [default](https://github.com/Arachnid/deterministic-deployment-proxy) factory address is used for this, and the salt is calculated based on the set `OWNER_ADDRESS` with `bun run initcodehash`. Reference values used in previous deployments:
+
+| Chain ID                    | Salt                                                               |
+| --------------------------- | ------------------------------------------------------------------ |
+| Mainnet (1)                 | 0xTODO                                                             |
+| Base (8453)                 | 0x                                                                 |
+| Optimism (10)               | 0x                                                                 |
+| Sepolia (11155111)          | 0x                                                                 |
+| Base Sepolia (84532)        | 0x6a529534ed37e3d7f3e5109010c7d75b9710d0b998c405e3c92739ff5232a483 |
+| Optimism Sepolia (11155420) | 0x                                                                 |
+
 
 ## Built with
 - [Foundry](https://getfoundry.sh/)
