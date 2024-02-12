@@ -45,7 +45,7 @@ See the Witness docs at [https://docs.witness.co](https://docs.witness.co) for m
 It's recommended to install this via an NPM-ish package manager; eg:
 
 ```sh
-bun add github:WitnessCo/contracts-core
+bun add github:witnessco/contracts-core
 ```
 
 You may need to set up a `remapping.txt` or similar to get your project's toolchain to detect the contracts:
