@@ -37,10 +37,10 @@ struct Proof {
 struct RootInfo {
     // Max value = 2**176 - 1 = ~9.5e52
     uint176 treeSize;
-    // Max value = 2**48 - 1 = ~2.8e14 = 281474976710655 = overflows unix time calculator
-    uint48 timestamp;
-    // Max value = 2**32 - 1 = ~4.2e9 = ~1000-timelengths of current arbitrum
-    uint32 height;
+    // Max value = 2**40 - 1 = ~1.1e12 = 1099511627775 seconds = tens-of-thousands of years into the future
+    uint40 timestamp;
+    // Max value = 2**40 - 1 = ~1.1e12 = 1099511627775 = thousands of years' worth of sub-second blocks into the future
+    uint40 height;
 }
 
 /// @title IWitness

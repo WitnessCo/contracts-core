@@ -154,7 +154,7 @@ contract Witness is IWitness, OwnableRoles {
             // Update the tree state.
             bytes32 root = getRoot(newRange);
             currentRoot = root;
-            _rootInfo[root] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
+            _rootInfo[root] = RootInfo(newSize.toUint176(), block.timestamp.toUint40(), block.number.toUint40());
             emit RootUpdated(root, newSize);
             return;
         }
@@ -199,7 +199,7 @@ contract Witness is IWitness, OwnableRoles {
 
         // ---HANDLE UPDATE PT 2. UPDATE STATE & EMIT EVENTS---
         currentRoot = newRoot;
-        _rootInfo[newRoot] = RootInfo(newSize.toUint176(), block.timestamp.toUint48(), block.number.toUint32());
+        _rootInfo[newRoot] = RootInfo(newSize.toUint176(), block.timestamp.toUint40(), block.number.toUint40());
         emit RootUpdated(newRoot, newSize);
     }
 
