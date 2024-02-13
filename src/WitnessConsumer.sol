@@ -6,6 +6,7 @@ import { IWitnessConsumer } from "./interfaces/IWitnessConsumer.sol";
 
 /// @title WitnessConsumer
 /// @author sina.eth
+/// @custom:coauthor runtheblocks.eth
 /// @notice Utility mixin for contracts that want to consume provenance.
 /// @dev See IWitnessConsumer.sol for more information.
 abstract contract WitnessConsumer is IWitnessConsumer {

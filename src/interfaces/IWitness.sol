@@ -45,6 +45,7 @@ struct RootInfo {
 
 /// @title IWitness
 /// @author sina.eth
+/// @custom:coauthor runtheblocks.eth
 /// @notice Interface for the core Witness smart contract.
 /// @dev Base interface for the Witness contract.
 interface IWitness {
