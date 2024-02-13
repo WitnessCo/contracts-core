@@ -1,44 +1,44 @@
 {
-  "name": "@witnessco/core-contracts",
-  "description": "Core Solidity contracts for WitnessCo",
-  "version": "1.0.0",
-  "author": {
-    "name": "Sina Sabet",
-    "email": "sina@chroniclelabs.xyz",
-    "url": "https://github.com/WitnessCo/core-contracts"
-  },
-  "dependencies": {
-    "solady": "^0.0.167"
-  },
-  "devDependencies": {
-    "@prb/test": "^0.6.4",
-    "@types/bun": "^1.0.0",
-    "bun-plugin-dts": "^0.2.1",
-    "forge-std": "github:foundry-rs/forge-std#v1.7.5",
-    "prettier": "^3.0.0",
-    "solhint": "^3.6.2",
-    "viem": "^2.7.6",
-    "zod": "^3.22.4"
-  },
-  "peerDependencies": {
-    "viem": "^2.7.6",
-    "zod": "^3.22.4"
-  },
-  "scripts": {
-    "clean": "rm -rf cache out node_modules dist",
-    "build": "bun run build:sol && bun run build:ts",
-    "build:sol": "forge build",
-    "build:ts": "bun run ts/build.mjs",
-    "lint": "bun run lint:sol && bun run prettier:check",
-    "lint:sol": "forge fmt --check && bun solhint {script,src,test}/**/*.sol",
-    "prettier:check": "prettier --check **/*.{json,md,yml,ts,mjs} --ignore-path=.prettierignore",
-    "prettier:write": "prettier --write **/*.{json,md,yml,ts,mjs} --ignore-path=.prettierignore",
-    "generate:abis": "bun run ts/genAbis.ts",
-    "generate:docs": "forge doc --out docsTemp && bun run ts/genDocs.ts",
-    "test": "forge test",
-    "ctest": "clear && forge test",
-    "test:coverage": "forge coverage",
-    "test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage",
-    "initcodehash": "cast keccak $(cast concat-hex \"$(forge inspect --silent Witness bytecode)\" \"$(cast abi-encode 'abi.encode(address)' \"$OWNER_ADDRESS\")\")"
-  }
+	"name": "@witnessco/core-contracts",
+	"description": "Core Solidity contracts for WitnessCo",
+	"version": "1.0.0",
+	"author": {
+		"name": "Sina Sabet",
+		"email": "sina@chroniclelabs.xyz",
+		"url": "https://github.com/WitnessCo/core-contracts"
+	},
+	"dependencies": {
+		"solady": "^0.0.167"
+	},
+	"devDependencies": {
+		"@prb/test": "^0.6.4",
+		"@types/bun": "^1.0.0",
+		"bun-plugin-dts": "^0.2.1",
+		"forge-std": "github:foundry-rs/forge-std#v1.7.5",
+		"prettier": "^3.0.0",
+		"solhint": "^3.6.2",
+		"viem": "^2.7.6",
+		"zod": "^3.22.4"
+	},
+	"peerDependencies": {
+		"viem": "^2.7.6",
+		"zod": "^3.22.4"
+	},
+	"scripts": {
+		"clean": "rm -rf cache out node_modules dist",
+		"build": "bun run build:sol && bun run build:ts",
+		"build:sol": "forge build",
+		"build:ts": "bun run ts/build.mjs",
+		"lint": "bun run lint:sol && bun run prettier:check",
+		"lint:sol": "forge fmt --check && bun solhint {script,src,test}/**/*.sol",
+		"prettier:check": "prettier --check **/*.{json,md,yml,ts,mjs} --ignore-path=.prettierignore",
+		"prettier:write": "prettier --write **/*.{json,md,yml,ts,mjs} --ignore-path=.prettierignore",
+		"generate:abis": "bun run ts/genAbis.ts",
+		"generate:docs": "forge doc --out docsTemp && bun run ts/genDocs.ts",
+		"test": "forge test",
+		"ctest": "clear && forge test",
+		"test:coverage": "forge coverage",
+		"test:coverage:report": "forge coverage --report lcov && genhtml lcov.info --branch-coverage --output-dir coverage",
+		"initcodehash": "source .env && cast keccak $(cast concat-hex \"$(forge inspect --silent Witness bytecode)\" \"$(cast abi-encode 'abi.encode(address)' \"$OWNER_ADDRESS\")\")"
+	}
 }

@@ -118,7 +118,7 @@ If you need a deployment on a new chain, feel free to open an issue and we can h
 | Base (8453)                 | 0x                                         |
 | Optimism (10)               | 0x                                         |
 | Sepolia (11155111)          | 0x                                         |
-| Base Sepolia (84532)        | 0x630f98e225829F1F632cdD206796e072a120F648 |
+| Base Sepolia (84532)        | 0x0000000Ee8E710b4bEA2a943ef1c9560AC0f513e |
 | Optimism Sepolia (11155420) | 0x                                         |
 
 ### Deploying on a new EVM chain
@@ -126,26 +126,34 @@ If you need a deployment on a new chain, feel free to open an issue and we can h
 Deployment on a new chain involves a few steps:
 
 1. Deploy a Gnosis Safe to be the `owner` param of the deployment (see below for guidance). Set this as the `OWNER_ADDRESS` value in your `.env` file.
-2. Calculate the CREATE2 initcode hash for the `Witness` contract via the following:
-```sh
-bun run initcodehash
-```
-3. Set `DEPLOYMENT_PRIVATE_KEY`, `DEPLOYMENT_SALT`, and any of the explorer API key variables in your `.env` file
+2. Either reuse from below or calculate the CREATE2 deployment salt for the `Witness` contract via the following steps:
+    ```sh
+    cast create2 \
+      --starts-with 0000000 \
+      --init-code-hash $(bun run initcodehash) 
+    ```
+3. Ensure the following environment variables are all set:
+
+   a. `DEPLOYMENT_PRIVATE_KEY` is set to a funded EOA
+
+   b. `DEPLOYMENT_SALT` is set to the value calculated in step 2
+
+   c. `ETHERSCAN_API_KEY`, and `VERIFIER_URL` are all set accordingly for the chain you're deploying to and the explorer you want the verification on
+
 4. Run `Deploy.s.sol` with the `owner` constructor param, the create2 factory, and the salt set:
-```sh
-forge script Deploy \
-  --broadcast \
-  -f=<YOUR_RPC_URL> \
-  --verify \
-  --verifier=sourcify
-```
+    ```sh
+    forge script Deploy \
+        --broadcast \
+        -f=<YOUR_RPC_URL> \
+        --verifier=blockscout \
+        --watch
+    ```
 5. Note down the resulting values into this README:
     - Any Gnosis Safe that needed to be deployed, along with any new signers
     - Create2 factory and salt used for deployment if modified
     - Deployed address for `Witness.sol`
 6. Add any additional `UPDATER_ROLE` addresses via the `grantRoles` method, called via the owner
 7. Set up your checkpointer to submit updates to the new chain's `Witness.sol` address
-8. You're all set!
 
 Note that because we're using a Create2 factory, the EOA you deploy from won't affect the resulting address.
 
@@ -181,7 +189,7 @@ For chains that the MultiSafe tool doesn't support, we can manually deploy Gnosi
 | Base (8453)                 | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://basescan.org/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)                    |
 | Optimism (10)               | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://optimistic.etherscan.io/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)         |
 | Sepolia (11155111)          | [0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83](https://sepolia.etherscan.io/address/0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83)            |
-| Base Sepolia (84532)        | [0xf554f6e21094adb06680bd49aab99b622c68cec0](https://sepolia.basescan.org/address/0xf554f6e21094adb06680bd49aab99b622c68cec0)            |
+| Base Sepolia (84532)        | [0xF554f6e21094aDB06680bD49aAB99b622c68CEc0](https://sepolia.basescan.org/address/0xf554f6e21094adb06680bd49aab99b622c68cec0)            |
 | Optimism Sepolia (11155420) | [0xc22834581ebc8527d974f8a1c97e1bea4ef910bc](https://optimism-sepolia.blockscout.com/address/0xc22834581ebc8527d974f8a1c97e1bea4ef910bc) |
 
 #### Create2 Factory and Salt
