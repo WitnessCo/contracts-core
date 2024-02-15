@@ -158,6 +158,18 @@ You may want to take an additional step to verify the deployment on Etherscan or
 
 Note that because we're using a Create2 factory, the EOA you deploy from won't affect the resulting address.
 
+#### Verifying the deployment
+
+You can verify the source of the deployed contracts on an explorer like Blockscout. A sample command for Base is shown below:
+```sh
+forge verify-contract \
+  --watch \
+  --verifier=blockscout \
+  --verifier-url=https://base.blockscout.com/api\? \
+  0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a \
+  Witness
+```
+
 ### Reference Values
 
 #### Owner Gnosis Safe Signers
