@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity ^0.8.0;
 
-import { OwnableRoles } from "solady/auth/OwnableRoles.sol";
-import { LibBit } from "solady/utils/LibBit.sol";
-import { LibZip } from "solady/utils/LibZip.sol";
-import { SafeCastLib } from "solady/utils/SafeCastLib.sol";
+import { OwnableRoles } from "solady/src/auth/OwnableRoles.sol";
+import { LibBit } from "solady/src/utils/LibBit.sol";
+import { LibZip } from "solady/src/utils/LibZip.sol";
+import { SafeCastLib } from "solady/src/utils/SafeCastLib.sol";
 
 import {
     InvalidProofBadLeftRange,
