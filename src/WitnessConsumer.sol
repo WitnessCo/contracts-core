@@ -10,40 +10,26 @@ import { IWitnessConsumer } from "./interfaces/IWitnessConsumer.sol";
 /// @notice Utility mixin for contracts that want to consume provenance.
 /// @dev See IWitnessConsumer.sol for more information.
 abstract contract WitnessConsumer is IWitnessConsumer {
-    /*//////////////////////////////////////////////////////////////////////////
-                                   PUBLIC STORAGE
-    //////////////////////////////////////////////////////////////////////////*/
-
-    /// @notice The Witness contract that this contract uses to verify provenance.
-    /// @inheritdoc IWitnessConsumer
-    IWitness public immutable WITNESS;
-
-    /*//////////////////////////////////////////////////////////////////////////
-                                     CONSTRUCTOR
-    //////////////////////////////////////////////////////////////////////////*/
-
-    /// @dev Immutably sets the Witness address.
-    /// @param _witness The address that's used as the Witness to verify provenance against.
-    constructor(IWitness _witness) {
-        WITNESS = _witness;
-    }
-
     /*//////////////////////////////////////////////////////////////
                          READ METHODS
     //////////////////////////////////////////////////////////////*/
 
+    /// @notice The Witness contract that this contract uses to verify provenance.
     /// @inheritdoc IWitnessConsumer
-    function getProvenanceHash(bytes calldata data) public view virtual returns (bytes32) {
+    function WITNESS() public view virtual returns (IWitness);
+
+    /// @inheritdoc IWitnessConsumer
+    function getProvenanceHash(bytes calldata data) external view virtual returns (bytes32) {
         return keccak256(data);
     }
 
     /// @inheritdoc IWitnessConsumer
-    function verifyProof(Proof calldata proof) public view virtual {
-        WITNESS.verifyProof(proof);
+    function verifyProof(Proof calldata proof) external view virtual {
+        WITNESS().verifyProof(proof);
     }
 
     /// @inheritdoc IWitnessConsumer
-    function safeVerifyProof(Proof calldata proof) public view virtual returns (bool) {
-        return WITNESS.safeVerifyProof(proof);
+    function safeVerifyProof(Proof calldata proof) external view virtual returns (bool) {
+        return WITNESS().safeVerifyProof(proof);
     }
 }
