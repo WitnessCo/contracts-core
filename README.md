@@ -166,6 +166,7 @@ forge verify-contract \
   --watch \
   --verifier=blockscout \
   --verifier-url=https://base.blockscout.com/api\? \
+  --constructor-args $(cast abi-encode "constructor(address)" "0x10e859116a6388A7D0540a1bc1247Ae599d24F16") \
   0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a \
   Witness
 ```
