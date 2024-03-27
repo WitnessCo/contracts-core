@@ -1,0 +1,3 @@
+[submodule "lib/contracts-core"]
+	path = lib/contracts-core
+	url = https://github.com/WitnessCo/contracts-core
