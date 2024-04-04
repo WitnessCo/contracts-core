@@ -4,6 +4,7 @@ pragma solidity 0.8.18;
 import { PRBTest } from "@prb/test/src/PRBTest.sol";
 import { StdUtils } from "forge-std/src/StdUtils.sol";
 import { LibBit } from "solady/src/utils/LibBit.sol";
+import { console } from "forge-std/src/console.sol";
 
 import { Proof } from "src/interfaces/IWitness.sol";
 import { Witness } from "src/Witness.sol";

@@ -6,20 +6,10 @@ import { LibBit } from "solady/src/utils/LibBit.sol";
 import { LibZip } from "solady/src/utils/LibZip.sol";
 import { SafeCastLib } from "solady/src/utils/SafeCastLib.sol";
 
-import {
-    InvalidProofBadLeftRange,
-    InvalidProofBadRightRange,
-    InvalidProofLeafIdxOutOfBounds,
-    InvalidProofUnrecognizedRoot,
-    InvalidUpdateNewRangeMismatchWrongLength,
-    InvalidUpdateOldRangeMismatchShouldBeEmpty,
-    InvalidUpdateOldRangeMismatchWrongCurrentRoot,
-    InvalidUpdateOldRangeMismatchWrongLength,
-    InvalidUpdateTreeSizeMustGrow,
-    IWitness,
-    Proof,
-    RootInfo
-} from "./interfaces/IWitness.sol";
+import { ECDSA } from "solady/src/utils/ECDSA.sol";
+import { SignatureCheckerLib } from "solady/src/utils/SignatureCheckerLib.sol";
+
+import { IWitness, Proof, RootInfo } from "./interfaces/IWitness.sol";
 import {
     getRangeSizeForNonZeroBeginningInterval,
     getRoot,
@@ -39,6 +29,8 @@ contract Witness is IWitness, OwnableRoles {
     using SafeCastLib for uint256;
     using LibBit for uint256;
 
+    error InvalidSignature();
+
     /*//////////////////////////////////////////////////////////////////////////
                                    CONSTANTS
     //////////////////////////////////////////////////////////////////////////*/
@@ -55,12 +47,12 @@ contract Witness is IWitness, OwnableRoles {
     mapping(bytes32 root => RootInfo cache) internal _rootInfo;
 
     /// @inheritdoc IWitness
-    function rootInfo(bytes32 root) public view virtual returns (RootInfo memory) {
+    function rootInfo(bytes32 root) external view virtual returns (RootInfo memory) {
         return _rootInfo[root];
     }
 
     /// @inheritdoc IWitness
-    function rootCache(bytes32 root) public view virtual returns (uint256) {
+    function rootCache(bytes32 root) external view virtual returns (uint256) {
         return _rootInfo[root].treeSize;
     }
 
@@ -139,37 +131,94 @@ contract Witness is IWitness, OwnableRoles {
         onlyRoles(UPDATER_ROLE)
     {
         bytes32 _currentRoot = currentRoot;
+        
         // ---HANDLE EMPTY TREE CASE---
         if (_currentRoot == bytes32(0)) {
-            // Old range should be empty.
-            if (oldRange.length != 0) {
-                // Provided old range must be empty.
-                revert InvalidUpdateOldRangeMismatchShouldBeEmpty();
-            }
-            // Verify the size of newRange corresponds to the interval [0, newTreeSize).
-            if (newSize.popCount() != newRange.length) {
-                // Provided new range does not match expected size.
-                revert InvalidUpdateNewRangeMismatchWrongLength();
-            }
-            // Update the tree state.
-            bytes32 root = getRoot(newRange);
-            currentRoot = root;
-            _rootInfo[root] = RootInfo(newSize.toUint176(), block.timestamp.toUint40(), block.number.toUint40());
-            emit RootUpdated(root, newSize);
+            initializeEmptyTree(newSize, oldRange, newRange);
             return;
         }
+
+        uint256 currentSize = _rootInfo[_currentRoot].treeSize;
+
+        // ---NON-EMPTY TREE CASE; VALIDATE OLD RANGE---
+        validateOldRange(_currentRoot, currentSize, oldRange);
+        
+        // ---VALIDATE NEW RANGE---
+        validateNewRange(currentSize, newSize, newRange);
+
+        // ---HANDLE UPDATE PT 1. MERGE RANGES & CALCULATE NEW ROOT---
+        bytes32 newRoot = mergeRangesAndCalculateNewRoot(currentSize, newSize, oldRange, newRange);
+
+        // ---HANDLE UPDATE PT 2. UPDATE STATE & EMIT EVENTS---
+        _setTreeRoot(newRoot, newSize);
+    }
+
+    function updateTreeRoot(
+        uint256 newSize, 
+        bytes32[] calldata oldRange, 
+        bytes32[] calldata newRange, 
+        bytes calldata signature
+    ) external {
+        bytes32 _currentRoot = currentRoot;
+
+        // ---HANDLE EMPTY TREE CASE---
+        if (_currentRoot == bytes32(0)) {
+            initializeEmptyTree(newSize, oldRange, newRange);
+            return;
+        }
+
+        uint256 currentSize = _rootInfo[_currentRoot].treeSize;
+
+        // ---NON-EMPTY TREE CASE; VALIDATE OLD RANGE---
+        validateOldRange(_currentRoot, currentSize, oldRange);
+        
+        // ---VALIDATE NEW RANGE---
+        validateNewRange(currentSize, newSize, newRange);
+
+        // ---HANDLE UPDATE PT 1. MERGE RANGES & CALCULATE NEW ROOT---
+        bytes32 newRoot = mergeRangesAndCalculateNewRoot(currentSize, newSize, oldRange, newRange);
+
+        // ---VALIDATE SIGNATURE FROM SERVER PK---
+        if (!_verifySignature(newRoot, signature)) revert InvalidSignature();
+
+        // ---SET TREE ROOT---
+        _setTreeRoot(newRoot, newSize);
+    }
+
+    function initializeEmptyTree(uint256 newSize, bytes32[] calldata oldRange, bytes32[] calldata newRange) public {
+        // ---HANDLE EMPTY TREE CASE---
+        // Old range should be empty.
+        if (oldRange.length != 0) {
+            // Provided old range must be empty.
+            revert InvalidUpdateOldRangeMismatchShouldBeEmpty();
+        }
+        // Verify the size of newRange corresponds to the interval [0, newTreeSize).
+        if (newSize.popCount() != newRange.length) {
+            // Provided new range does not match expected size.
+            revert InvalidUpdateNewRangeMismatchWrongLength();
+        }
+        // Update the tree state.
+        bytes32 root = getRoot(newRange);
+        currentRoot = root;
+        _rootInfo[root] = RootInfo(newSize.toUint176(), block.timestamp.toUint40(), block.number.toUint40());
+        emit RootUpdated(root, newSize);
+    }
+
+    function validateOldRange(bytes32 _currentRoot, uint256 currentSize, bytes32[] calldata oldRange) public pure {
         // ---NON-EMPTY TREE CASE; VALIDATE OLD RANGE---
         // Verify oldRange corresponds to the old root.
         if (_currentRoot != getRoot(oldRange)) {
             // Provided old range does not match current root.
             revert InvalidUpdateOldRangeMismatchWrongCurrentRoot();
         }
-        uint256 currentSize = _rootInfo[_currentRoot].treeSize;
         // Verify size of oldRange corresponds to the size of the old root.
         if (currentSize.popCount() != oldRange.length) {
             // Provided old range does not match current tree size.
             revert InvalidUpdateOldRangeMismatchWrongLength();
         }
+    }
+
+    function validateNewRange(uint256 currentSize, uint256 newSize, bytes32[] calldata newRange) public pure {
         // ---VALIDATE NEW RANGE---
         // New range should grow the tree.
         if (newSize <= currentSize) {
@@ -181,7 +230,9 @@ contract Witness is IWitness, OwnableRoles {
             // Provided new range does not match expected size.
             revert InvalidUpdateNewRangeMismatchWrongLength();
         }
+    }
 
+    function mergeRangesAndCalculateNewRoot(uint256 currentSize, uint256 newSize, bytes32[] calldata oldRange, bytes32[] calldata newRange) public pure returns (bytes32 newRoot) {
         // ---HANDLE UPDATE PT 1. MERGE RANGES & CALCULATE NEW ROOT---
         // Merge oldRange with newRange to get the new combinedRange covering the new tree.
         // Merge starting with rightmost-entry in oldRange, which we call the seed.
@@ -195,8 +246,18 @@ contract Witness is IWitness, OwnableRoles {
         uint256 seedIndex = (currentSize - 1) >> seedHeight;
         (bytes32[] calldata mergedLeft, bytes32 newSeed, bytes32[] calldata mergedRight) =
             merge(oldRange[:seedArrayIdx], seed, seedHeight, seedIndex, newRange, newSize);
-        bytes32 newRoot = getRootForMergedRange(mergedLeft, newSeed, mergedRight);
+        newRoot = getRootForMergedRange(mergedLeft, newSeed, mergedRight);
+    }
 
+    function _verifySignature(
+        bytes32 newRoot,
+        bytes calldata signature
+    ) internal view returns (bool) {
+        bytes32 digest = ECDSA.toEthSignedMessageHash(abi.encode(newRoot));
+        return SignatureCheckerLib.isValidSignatureNowCalldata(owner(), digest, signature);
+    }
+
+    function _setTreeRoot(bytes32 newRoot, uint256 newSize) private {
         // ---HANDLE UPDATE PT 2. UPDATE STATE & EMIT EVENTS---
         currentRoot = newRoot;
         _rootInfo[newRoot] = RootInfo(newSize.toUint176(), block.timestamp.toUint40(), block.number.toUint40());

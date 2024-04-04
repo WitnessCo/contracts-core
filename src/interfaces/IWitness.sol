@@ -1,22 +1,6 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity ^0.8.0;
 
-/*//////////////////////////////////////////////////////////////
-                        CUSTOM ERRORS
-//////////////////////////////////////////////////////////////*/
-/// Proof verification errors.
-error InvalidProofLeafIdxOutOfBounds();
-error InvalidProofBadLeftRange();
-error InvalidProofBadRightRange();
-error InvalidProofUnrecognizedRoot();
-
-/// Tree update errors.
-error InvalidUpdateOldRangeMismatchShouldBeEmpty();
-error InvalidUpdateOldRangeMismatchWrongCurrentRoot();
-error InvalidUpdateOldRangeMismatchWrongLength();
-error InvalidUpdateTreeSizeMustGrow();
-error InvalidUpdateNewRangeMismatchWrongLength();
-
 /// @title Proof
 /// @notice A proof for a given leaf in a merkle mountain range.
 struct Proof {
@@ -49,6 +33,23 @@ struct RootInfo {
 /// @notice Interface for the core Witness smart contract.
 /// @dev Base interface for the Witness contract.
 interface IWitness {
+    /*//////////////////////////////////////////////////////////////
+                        CUSTOM ERRORS
+    //////////////////////////////////////////////////////////////*/
+    
+    /// Proof verification errors.
+    error InvalidProofLeafIdxOutOfBounds();
+    error InvalidProofBadLeftRange();
+    error InvalidProofBadRightRange();
+    error InvalidProofUnrecognizedRoot();
+
+    /// Tree update errors.
+    error InvalidUpdateOldRangeMismatchShouldBeEmpty();
+    error InvalidUpdateOldRangeMismatchWrongCurrentRoot();
+    error InvalidUpdateOldRangeMismatchWrongLength();
+    error InvalidUpdateTreeSizeMustGrow();
+    error InvalidUpdateNewRangeMismatchWrongLength();
+
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
     //////////////////////////////////////////////////////////////*/
