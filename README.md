@@ -122,6 +122,7 @@ These values should be kept in-sync with the values provided [the client SDK](ht
 | Sepolia (11155111)          | [0x00000008bcf12Eeb9E4162687D6D251f0F4e7FC2](https://eth-sepolia.blockscout.com/address/0x00000008bcf12Eeb9E4162687D6D251f0F4e7FC2)      |
 | Base Sepolia (84532)        | [0x0000000159C8253802551eEaf8b475db1A50d712](https://base-sepolia.blockscout.com/address/0x0000000159C8253802551eEaf8b475db1A50d712)     |
 | Optimism Sepolia (11155420) | [0x0000000a3fa5CFe56b202F376cCa7334c93aEB8b](https://optimism-sepolia.blockscout.com/address/0x0000000a3fa5CFe56b202F376cCa7334c93aEB8b) |
+| Arbitrum Sepolia (421614)   | [0x00000006399970c8bdad606abD03b1712974E4eA](https://arbiscan.io/address/0x00000006399970c8bdad606abD03b1712974E4eA)                     |
 
 ### Deploying on a new EVM chain
 
@@ -178,9 +179,9 @@ forge verify-contract \
 All safes use the following singers under a 3-of-5 threshold:
 
 - `0x9668aCbF23F0c4BC87B6D843EeEE35C20B91f643`
-- `0x4f31617dc6f154cffba81eb5b9b307b442b3e661`
+- `0x4f31617dc6f154cFfbA81eB5B9B307b442B3e661`
 - `0x42EE0F3D7E54b6feF329fB6dc860634794832D2F`
-- `0x3e8a785b44d28a9522d16e29158bea1c06d3a762`
+- `0x3E8A785b44D28a9522d16E29158beA1c06D3A762`
 - `0x2e6511E702a256b92Be25580803f93269a1b8E45`
 - `0x72Ff26D9517324eEFA89A48B75c5df41132c4f54`
 
@@ -205,6 +206,9 @@ For chains that the MultiSafe tool doesn't support, we can manually deploy Gnosi
 | Sepolia (11155111)          | [0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83](https://sepolia.etherscan.io/address/0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83)            |
 | Base Sepolia (84532)        | [0xF554f6e21094aDB06680bD49aAB99b622c68CEc0](https://sepolia.basescan.org/address/0xf554f6e21094adb06680bd49aab99b622c68cec0)            |
 | Optimism Sepolia (11155420) | [0xc6Fbdce6Ac57cEbF2032A318D92D0ffFc050A726](https://optimism-sepolia.blockscout.com/address/0xc6Fbdce6Ac57cEbF2032A318D92D0ffFc050A726) |
+| Arbitrum Sepolia (421614)   | [0xd7db685f44CCDe17C966A16528d94942b497EBfE](https://arbiscan.io/address/0xd7db685f44CCDe17C966A16528d94942b497EBfE)                     |
+
+Note that Arbitrum Sepolia's owner is currently set to an EOA, since no UIs are available to deploy a Gnosis Safe on Arbitrum Sepolia.
 
 #### Create2 Factory and Salt
 
@@ -218,6 +222,7 @@ When running the deploy script above, a factory address and salt are required fo
 | Sepolia (11155111)          | 0x25f297d9d4634e6d9b64a5762249df8c841977106db6cfc152c5c261722238e4 |
 | Base Sepolia (84532)        | 0xbee48227768131701635040060883388e02d0cf71f757b851e6a9f3f5517e50d |
 | Optimism Sepolia (11155420) | 0x1af2805263ccc6cb32de029263b124831c7b5666255f7a9c0356e2dfedb7b6e3 |
+| Arbitrum Sepolia (421614)   | 0x425a725a8da61fb936f4693b36ebfba06e2244cb58173ba49ad6fc80976fa2c3 |
 
 
 ## Built with
