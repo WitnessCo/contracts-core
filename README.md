@@ -123,6 +123,7 @@ These values should be kept in-sync with the values provided [the client SDK](ht
 | Base Sepolia (84532)        | [0x0000000159C8253802551eEaf8b475db1A50d712](https://base-sepolia.blockscout.com/address/0x0000000159C8253802551eEaf8b475db1A50d712)     |
 | Optimism Sepolia (11155420) | [0x0000000a3fa5CFe56b202F376cCa7334c93aEB8b](https://optimism-sepolia.blockscout.com/address/0x0000000a3fa5CFe56b202F376cCa7334c93aEB8b) |
 | Arbitrum Sepolia (421614)   | [0x00000006399970c8bdad606abD03b1712974E4eA](https://arbiscan.io/address/0x00000006399970c8bdad606abD03b1712974E4eA)                     |
+| Gnosis Chiado (10200)       | [0x000000031C0d9df77F390CED953219E561B67089](https://gnosis-chiado.blockscout.com/address/0x000000031C0d9df77F390CED953219E561B67089)                     |
 
 ### Deploying on a new EVM chain
 
@@ -207,8 +208,9 @@ For chains that the MultiSafe tool doesn't support, we can manually deploy Gnosi
 | Base Sepolia (84532)        | [0xF554f6e21094aDB06680bD49aAB99b622c68CEc0](https://sepolia.basescan.org/address/0xf554f6e21094adb06680bd49aab99b622c68cec0)            |
 | Optimism Sepolia (11155420) | [0xc6Fbdce6Ac57cEbF2032A318D92D0ffFc050A726](https://optimism-sepolia.blockscout.com/address/0xc6Fbdce6Ac57cEbF2032A318D92D0ffFc050A726) |
 | Arbitrum Sepolia (421614)   | [0xd7db685f44CCDe17C966A16528d94942b497EBfE](https://arbiscan.io/address/0xd7db685f44CCDe17C966A16528d94942b497EBfE)                     |
+| Gnosis Chiado (10200)       | [0xd7db685f44CCDe17C966A16528d94942b497EBfE](https://gnosis-chiado.blockscout.com/address/0xd7db685f44CCDe17C966A16528d94942b497EBfE)                     |
 
-Note that Arbitrum Sepolia's owner is currently set to an EOA, since no UIs are available to deploy a Gnosis Safe on Arbitrum Sepolia.
+Note that Arbitrum Sepolia and Gnosis Chiado's owner is currently set to an EOA.  
 
 #### Create2 Factory and Salt
 
@@ -223,6 +225,7 @@ When running the deploy script above, a factory address and salt are required fo
 | Base Sepolia (84532)        | 0xbee48227768131701635040060883388e02d0cf71f757b851e6a9f3f5517e50d |
 | Optimism Sepolia (11155420) | 0x1af2805263ccc6cb32de029263b124831c7b5666255f7a9c0356e2dfedb7b6e3 |
 | Arbitrum Sepolia (421614)   | 0x425a725a8da61fb936f4693b36ebfba06e2244cb58173ba49ad6fc80976fa2c3 |
+| Gnosis Chiado (10200)       | 0x0000000000000000000000000000000000000000000000005fc8112200000000 |
 
 
 ## Built with
