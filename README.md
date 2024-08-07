@@ -119,6 +119,7 @@ These values should be kept in-sync with the values provided [the client SDK](ht
 | Mainnet (1)                 | [0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a](https://etherscan.io/address/0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a)                    |
 | Base (8453)                 | [0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a](https://base.blockscout.com/address/0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a)             |
 | Optimism (10)               | [0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a](https://optimism.blockscout.com/address/0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a)         |
+| Arbitrum (42161)               | [0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a](https://arbiscan.io/address/0x0000000e143f453f45B2E1cCaDc0f3CE21c2F06a)         |
 | Sepolia (11155111)          | [0x00000008bcf12Eeb9E4162687D6D251f0F4e7FC2](https://eth-sepolia.blockscout.com/address/0x00000008bcf12Eeb9E4162687D6D251f0F4e7FC2)      |
 | Base Sepolia (84532)        | [0x0000000159C8253802551eEaf8b475db1A50d712](https://base-sepolia.blockscout.com/address/0x0000000159C8253802551eEaf8b475db1A50d712)     |
 | Optimism Sepolia (11155420) | [0x0000000a3fa5CFe56b202F376cCa7334c93aEB8b](https://optimism-sepolia.blockscout.com/address/0x0000000a3fa5CFe56b202F376cCa7334c93aEB8b) |
@@ -204,6 +205,7 @@ For chains that the MultiSafe tool doesn't support, we can manually deploy Gnosi
 | Mainnet (1)                 | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://etherscan.io/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)                    |
 | Base (8453)                 | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://basescan.org/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)                    |
 | Optimism (10)               | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://optimistic.etherscan.io/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)         |
+| Arbitrum (42161)            | [0x10e859116a6388A7D0540a1bc1247Ae599d24F16](https://basescan.org/address/0x10e859116a6388A7D0540a1bc1247Ae599d24F16)         |    
 | Sepolia (11155111)          | [0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83](https://sepolia.etherscan.io/address/0x71bA2A9b041C8597E468B5e630b0E43Eb87BDc83)            |
 | Base Sepolia (84532)        | [0xF554f6e21094aDB06680bD49aAB99b622c68CEc0](https://sepolia.basescan.org/address/0xf554f6e21094adb06680bd49aab99b622c68cec0)            |
 | Optimism Sepolia (11155420) | [0xc6Fbdce6Ac57cEbF2032A318D92D0ffFc050A726](https://optimism-sepolia.blockscout.com/address/0xc6Fbdce6Ac57cEbF2032A318D92D0ffFc050A726) |
@@ -221,6 +223,7 @@ When running the deploy script above, a factory address and salt are required fo
 | Mainnet (1)                 | 0xb3eaff343f96035800d8b917841ce9c526b3187bdbaa31ca1324d9403cfca860 |
 | Base (8453)                 | 0xb3eaff343f96035800d8b917841ce9c526b3187bdbaa31ca1324d9403cfca860 |
 | Optimism (10)               | 0xb3eaff343f96035800d8b917841ce9c526b3187bdbaa31ca1324d9403cfca860 |
+| Arbitrum (42161)            | 0xb3eaff343f96035800d8b917841ce9c526b3187bdbaa31ca1324d9403cfca860 |
 | Sepolia (11155111)          | 0x25f297d9d4634e6d9b64a5762249df8c841977106db6cfc152c5c261722238e4 |
 | Base Sepolia (84532)        | 0xbee48227768131701635040060883388e02d0cf71f757b851e6a9f3f5517e50d |
 | Optimism Sepolia (11155420) | 0x1af2805263ccc6cb32de029263b124831c7b5666255f7a9c0356e2dfedb7b6e3 |
