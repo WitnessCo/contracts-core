@@ -1,4 +1,4 @@
-# Witness Core Contracts [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![License: BUSL-1.1][license-badge]][license]
+# WITNESS Protocol [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![License: BUSL-1.1][license-badge]][license]
 
 [gitpod]: https://gitpod.io/#https://github.com/WitnessCo/contracts-core
 [gitpod-badge]: https://img.shields.io/badge/Gitpod-Open%20in%20Gitpod-FFB45B?logo=gitpod
