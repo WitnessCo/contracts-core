@@ -1,5 +1,7 @@
-# WITNESS Protocol [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![License: BUSL-1.1][license-badge]][license]
+# WITNESS Protocol [![Open in Gitpod][gitpod-badge]][gitpod] [![Open in Codeanywhere][codeanywhere-badge]][codeanywhere] [![Github Actions][gha-badge]][gha] [![License: BUSL-1.1][license-badge]][license]
 
+[codeanywhere]:https://app.codeanywhere.com/#https://github.com/WitnessCo/contracts-core
+[codeanywhere-badge]: https://img.shields.io/badge/Open%20in-Codeanywhere-blue?style=flat-square&logo=codeanywhere
 [gitpod]: https://gitpod.io/#https://github.com/WitnessCo/contracts-core
 [gitpod-badge]: https://img.shields.io/badge/Gitpod-Open%20in%20Gitpod-FFB45B?logo=gitpod
 [gha]: https://github.com/WitnessCo/contracts-core/actions
