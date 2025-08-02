@@ -92,7 +92,7 @@ forge test
 # Generate Typescript ABIs from build artifacts
 bun run build && bun generate:abis
 
-# Gererate docs to the `./docs` directory
+# Generate docs to the `./docs` directory
 bun generate:docs
 
 # Coverage
